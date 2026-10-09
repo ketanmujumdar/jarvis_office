@@ -537,6 +537,11 @@ func (r enrollmentRepo) LatestActive(ctx context.Context) (domain.Enrollment, er
 		`SELECT `+enrollmentCols+` FROM enrollments WHERE status = 'ACTIVE' ORDER BY created_at DESC, id DESC LIMIT 1`)
 }
 
+func (r enrollmentRepo) ListPending(ctx context.Context) ([]domain.Enrollment, error) {
+	return collect(ctx, r.s.db, "enrollment", scanEnrollment,
+		`SELECT `+enrollmentCols+` FROM enrollments WHERE status = 'REQUIRES_ACTION' ORDER BY created_at DESC, id DESC`)
+}
+
 func (r enrollmentRepo) UpdateStatus(ctx context.Context, id string, status domain.EnrollmentStatus, nextActionURL string) error {
 	if !validUUID(id) {
 		return notFound("enrollment", id)

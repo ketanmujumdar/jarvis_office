@@ -70,3 +70,15 @@ enroll: ## Enroll the office card via the Reap-hosted page (api must be running)
 
 app-run: ## Run the Flutter web app on :5173 against the local api
 	cd app && flutter run -d chrome --web-port 5173 --dart-define=API_BASE_URL=http://localhost:8080
+
+demo: ## Start everything for a demo (Docker api, web, tunnel) and print the URL
+	scripts/demo.sh start
+
+demo-status: ## Show demo stack status
+	scripts/demo.sh status
+
+demo-stop: ## Stop the demo stack
+	scripts/demo.sh stop
+
+demo-redeploy: ## Rebuild api + web after code changes, keeping the tunnel URL
+	scripts/demo.sh redeploy

@@ -57,20 +57,44 @@ func (o *Impl) StartEnrollment(ctx context.Context, user domain.User) (domain.En
 	return *e, nil
 }
 
-// CurrentEnrollment returns the latest enrollment, refreshing a non-terminal one from Reap.
+// CurrentEnrollment returns the ACTIVE enrollment if there is one, else the latest enrollment.
+// Pending enrollments are refreshed from Reap first: the in-process poll job is lost on restart,
+// so the user can finish Reap's hosted card page while nothing is watching it.
 func (o *Impl) CurrentEnrollment(ctx context.Context) (domain.Enrollment, error) {
-	e, err := o.d.Store.Enrollments().Latest(ctx)
-	if err != nil {
+	o.refreshPendingEnrollments(ctx)
+	if e, err := o.d.Store.Enrollments().LatestActive(ctx); err == nil {
+		return e, nil
+	} else if !errors.Is(err, domain.ErrNotFound) {
 		return domain.Enrollment{}, err
 	}
-	return o.refreshEnrollment(ctx, e)
+	return o.d.Store.Enrollments().Latest(ctx)
 }
 
-// activeEnrollment returns an ACTIVE enrollment, refreshing the latest pending one from Reap first.
+// refreshPendingEnrollments re-reads every REQUIRES_ACTION enrollment from Reap (best effort).
+func (o *Impl) refreshPendingEnrollments(ctx context.Context) {
+	pending, err := o.d.Store.Enrollments().ListPending(ctx)
+	if err != nil {
+		o.log.Warn("list pending enrollments failed", "err", err)
+		return
+	}
+	for _, e := range pending {
+		if _, err := o.refreshEnrollment(ctx, e); err != nil {
+			o.log.Warn("refresh enrollment failed", "enrollment_id", e.ID, "err", err)
+		}
+	}
+}
+
+// activeEnrollment returns an ACTIVE enrollment, refreshing pending ones from Reap first.
 func (o *Impl) activeEnrollment(ctx context.Context) (domain.Enrollment, error) {
 	e, err := o.d.Store.Enrollments().LatestActive(ctx)
 	if err == nil {
 		return e, nil
+	}
+	if errors.Is(err, domain.ErrNotFound) {
+		o.refreshPendingEnrollments(ctx)
+		if e, err = o.d.Store.Enrollments().LatestActive(ctx); err == nil {
+			return e, nil
+		}
 	}
 	if !errors.Is(err, domain.ErrNotFound) {
 		return domain.Enrollment{}, err

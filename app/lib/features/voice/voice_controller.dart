@@ -178,13 +178,77 @@ class PlaygroundController extends Notifier<PlaygroundState> {
   bool _responseActive = false;
   bool _needsResponse = false;
   int _seq = 0;
+  ProviderSubscription<AsyncValue<SseEvent>>? _narration;
 
   @override
   PlaygroundState build() {
     // Reset when the signed-in user changes.
     ref.watch(currentUserProvider.select((u) => u?.id));
     ref.onDispose(_teardown);
+    _narration = null;
     return const PlaygroundState();
+  }
+
+  // ------------------------------------------------------------ narration
+
+  /// Statuses worth telling the user about unprompted.
+  static const _narratedStatuses = {
+    'quoted',
+    'pending_approval',
+    'approved',
+    'awaiting_payment',
+    'ordered',
+    'failed',
+    'cancelled',
+    'rejected',
+  };
+
+  /// Turns backend progress (SSE) for this conversation's requests into a
+  /// spoken update: the event goes into the realtime conversation and Jarvis
+  /// is asked to tell the user, once any current reply has finished.
+  void _onServerEvent(SseEvent e) {
+    final id = e.requestId;
+    if (id == null || !state.requestIds.contains(id)) return;
+    String? update;
+    switch (e.type) {
+      case 'request.status_changed':
+        final to = e.data['to'] as String?;
+        if (to == null || !_narratedStatuses.contains(to)) return;
+        final reason = e.data['failure_reason'] as String?;
+        update =
+            'Request $id is now "$to"'
+            '${reason != null && reason.isNotEmpty ? ' ($reason)' : ''}.';
+      case 'approval.decided':
+        final a = e.data['approval'];
+        final status = a is Map ? a['status'] : null;
+        update = 'The approver has decided on request $id: $status.';
+      case 'payment.alert':
+        update =
+            'Payment alert on request $id: ${e.data['message'] ?? e.data['kind']}.';
+      default:
+        return;
+    }
+    _system('Update: $update');
+    // A tool call in flight (e.g. get_request_status waiting on the search)
+    // will return the new state itself, so don't narrate it twice.
+    if (!voiceLive || _pendingTools > 0) return;
+    _transport?.send({
+      'type': 'conversation.item.create',
+      'item': {
+        'type': 'message',
+        'role': 'system',
+        'content': [
+          {
+            'type': 'input_text',
+            'text':
+                '[Status update] $update Call get_request_status for '
+                'details and tell the user what happened in one or two short '
+                'sentences, including what they need to do next, if anything.',
+          },
+        ],
+      },
+    });
+    _requestResponse(force: true);
   }
 
   JarvisApi get _api => ref.read(apiProvider);
@@ -225,6 +289,14 @@ class PlaygroundController extends Notifier<PlaygroundState> {
 
   void _trackRequest(String? id) {
     if (id == null || id.isEmpty) return;
+    // Follow live progress once the conversation has a request to narrate.
+    _narration ??= ref.listen<AsyncValue<SseEvent>>(eventStreamProvider(null), (
+      _,
+      next,
+    ) {
+      final e = next.value;
+      if (e != null && next.hasValue) _onServerEvent(e);
+    });
     state = state.copyWith(
       activeRequestId: id,
       requestIds: state.requestIds.contains(id)
@@ -566,6 +638,14 @@ class PlaygroundController extends Notifier<PlaygroundState> {
         }
       case 'error':
         final err = e['error'];
+        if (err is Map &&
+            err['code'] == 'conversation_already_has_active_response') {
+          // Our response.create raced a reply the server started itself
+          // (e.g. from voice activity): retry once that reply is done.
+          _responseActive = true;
+          _needsResponse = true;
+          return;
+        }
         final msg = err is Map ? err['message'] as String? : null;
         _system(msg ?? 'The voice service reported an error.', error: true);
       case transportClosedEvent:

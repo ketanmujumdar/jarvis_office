@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -339,5 +340,52 @@ func TestToolsExecute_RoleGate(t *testing.T) {
 				t.Fatal("forbidden call reached the backend")
 			}
 		})
+	}
+}
+
+type flipBackend struct {
+	*fakeBackend
+	mu    sync.Mutex
+	calls int
+}
+
+// RequestDetail reports "searching" for the first two reads, then the real (quoted) state.
+func (b *flipBackend) RequestDetail(ctx context.Context, id string) (domain.RequestDetail, error) {
+	b.mu.Lock()
+	b.calls++
+	n := b.calls
+	b.mu.Unlock()
+	d, err := b.fakeBackend.RequestDetail(ctx, id)
+	if err == nil && n <= 2 {
+		d.Request.Status = domain.StatusSearching
+	}
+	return d, err
+}
+
+// One get_request_status call waits out the search instead of the model polling in a loop.
+func TestGetRequestStatus_WaitsWhileSearching(t *testing.T) {
+	b := &flipBackend{fakeBackend: newFakeBackend()}
+	r, _ := b.CreateOrder(context.Background(), "u1", CreateOrderRequestArgs{Utterance: "paper"})
+	tools := NewTools(b, seeded(t), nil)
+	out, err := tools.Execute(context.Background(), ToolContext{UserID: "u1", Role: domain.RoleManager, Channel: "voice"},
+		ToolGetRequestStatus, json.RawMessage(`{"request_id":"`+r.ID+`"}`))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(out), `"status":"quoted"`) {
+		t.Fatalf("want quoted after waiting, got %s", out)
+	}
+	if b.calls != 3 {
+		t.Fatalf("detail reads = %d, want 3", b.calls)
+	}
+
+	old := StatusWait
+	StatusWait = 0
+	defer func() { StatusWait = old }()
+	b.calls = 0
+	out, _ = tools.Execute(context.Background(), ToolContext{UserID: "u1", Role: domain.RoleManager, Channel: "voice"},
+		ToolGetRequestStatus, json.RawMessage(`{"request_id":"`+r.ID+`"}`))
+	if !strings.Contains(string(out), `"status":"searching"`) {
+		t.Fatalf("deadline passed: want searching returned as-is, got %s", out)
 	}
 }

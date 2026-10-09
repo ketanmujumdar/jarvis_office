@@ -353,3 +353,31 @@ func TestToolsBackend(t *testing.T) {
 		t.Fatalf("cancel = %v", cancelled)
 	}
 }
+
+// Regression: the user finished Reap's card page for an older enrollment, the in-process poll
+// was lost on restart, and newer abandoned attempts hid it. Both the status read and confirm
+// must refresh every pending enrollment and pick the ACTIVE one.
+func TestEnrollment_OlderActivatedWhileNewerPending(t *testing.T) {
+	e := newEnv(t, withoutEnrollment())
+	done, err := e.o.StartEnrollment(e.ctx, e.manager)
+	if err != nil {
+		t.Fatal(err)
+	}
+	time.Sleep(2 * time.Millisecond) // newer created_at
+	if _, err := e.o.StartEnrollment(e.ctx, e.manager); err != nil { // abandoned retry
+		t.Fatal(err)
+	}
+	if err := e.reapSrv.ActivateEnrollment(done.ReapEnrollmentID); err != nil {
+		t.Fatal(err)
+	}
+	cur, err := e.o.CurrentEnrollment(e.ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cur.ID != done.ID || cur.Status != domain.EnrollmentActive {
+		t.Fatalf("current = %s %s, want %s ACTIVE", cur.ID, cur.Status, done.ID)
+	}
+	if got, err := e.o.activeEnrollment(e.ctx); err != nil || got.ID != done.ID {
+		t.Fatalf("activeEnrollment = %v, %v", got.ID, err)
+	}
+}

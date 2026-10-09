@@ -41,7 +41,7 @@ func NewTools(b OrderBackend, s store.Store, a audit.Logger) *Tools {
 var toolDefs = []llm.Tool{
 	{
 		Name:        ToolCreateOrderRequest,
-		Description: "Start a purchase request from what the user asked for. The system parses items, matches the approved catalog, searches allowed vendors and runs policy. Returns the request id; then poll get_request_status until status is quoted.",
+		Description: "Start a purchase request from what the user asked for. The system parses items, matches the approved catalog, searches allowed vendors and runs policy. Returns the request id. Prices take 10-30 seconds; tell the user briefly, then call get_request_status ONCE (it waits for the search to finish). Do not call it repeatedly.",
 		Parameters: json.RawMessage(`{"type":"object","additionalProperties":false,"required":["utterance"],"properties":{
 "utterance":{"type":"string","description":"the user's request, verbatim"},
 "items":{"type":"array","description":"optional pre-parsed items","items":{"type":"object","additionalProperties":false,"required":["description"],"properties":{
@@ -143,7 +143,7 @@ func (t *Tools) dispatch(ctx context.Context, tc ToolContext, name string, args 
 		}
 		return map[string]any{
 			"request_id": r.ID, "status": r.Status,
-			"message": "Request created. Checking the catalog and allowed vendors now; call get_request_status until the status is quoted.",
+			"message": "Request created. Checking the catalog and allowed vendors now (10-30 s). Tell the user, then call get_request_status once; it waits for the result.",
 		}, nil
 	case ToolGetRequestStatus:
 		var a RequestIDArgs
@@ -153,7 +153,7 @@ func (t *Tools) dispatch(ctx context.Context, tc ToolContext, name string, args 
 		if a.RequestID == "" {
 			return nil, fmt.Errorf("%w: request_id is required", domain.ErrValidation)
 		}
-		d, err := t.Backend.RequestDetail(ctx, a.RequestID)
+		d, err := t.waitWhileSearching(ctx, a.RequestID)
 		if err != nil {
 			return nil, err
 		}
@@ -384,7 +384,7 @@ func latestApproval(as []domain.Approval) domain.Approval {
 func nextStep(s domain.RequestStatus) string {
 	switch s {
 	case domain.StatusParsing, domain.StatusSearching:
-		return "Still checking prices. Call get_request_status again shortly."
+		return "Still checking prices. Tell the user you will update them when prices are ready; an automatic status update will arrive. Do not keep calling get_request_status."
 	case domain.StatusQuoted:
 		return "Read back the lines and total, say which need approval, ask which delivery address to use, then call confirm_order after the user agrees."
 	case domain.StatusPendingApproval:
@@ -405,4 +405,26 @@ func nextStep(s domain.RequestStatus) string {
 		return "The request was cancelled."
 	}
 	return ""
+}
+
+// StatusWait bounds how long get_request_status blocks while a request is still parsing or
+// searching, so the model makes one call instead of polling in a tight loop.
+var StatusWait = 25 * time.Second
+
+func (t *Tools) waitWhileSearching(ctx context.Context, id string) (domain.RequestDetail, error) {
+	deadline := time.Now().Add(StatusWait)
+	for {
+		d, err := t.Backend.RequestDetail(ctx, id)
+		if err != nil {
+			return d, err
+		}
+		if (d.Request.Status != domain.StatusParsing && d.Request.Status != domain.StatusSearching) || time.Now().After(deadline) {
+			return d, nil
+		}
+		select {
+		case <-ctx.Done():
+			return d, nil
+		case <-time.After(500 * time.Millisecond):
+		}
+	}
 }

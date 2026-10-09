@@ -118,6 +118,8 @@ type EnrollmentRepo interface {
 	Latest(ctx context.Context) (domain.Enrollment, error)
 	// LatestActive returns the most recent ACTIVE enrollment. ErrNotFound if none.
 	LatestActive(ctx context.Context) (domain.Enrollment, error)
+	// ListPending returns REQUIRES_ACTION enrollments, newest first.
+	ListPending(ctx context.Context) ([]domain.Enrollment, error)
 	UpdateStatus(ctx context.Context, id string, status domain.EnrollmentStatus, nextActionURL string) error
 }
 

@@ -1039,6 +1039,18 @@ func (r enrollmentRepo) LatestActive(context.Context) (domain.Enrollment, error)
 	return r.latest(func(e domain.Enrollment) bool { return e.Status == domain.EnrollmentActive }, "latest active")
 }
 
+func (r enrollmentRepo) ListPending(context.Context) (out []domain.Enrollment, err error) {
+	err = r.s.do(func(d *state) error {
+		for _, x := range newestFirst(d, d.enrollments, func(e domain.Enrollment) (string, time.Time) { return e.ID, e.CreatedAt }) {
+			if x.Status == domain.EnrollmentRequiresAction {
+				out = append(out, x)
+			}
+		}
+		return nil
+	})
+	return out, err
+}
+
 func (r enrollmentRepo) UpdateStatus(_ context.Context, id string, status domain.EnrollmentStatus, nextActionURL string) error {
 	if !validEnrollmentStatus(status) {
 		return invalid("enrollment", "unknown status "+string(status))

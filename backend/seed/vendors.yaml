@@ -1,0 +1,463 @@
+# Vendors = the allow-listed Reap merchants (backend/seed/allowed_merchants.tsv).
+# Resolved by probing the Reap SG sandbox POST /agentic/products/search on 2026-10-09.
+#
+# Fields:
+#   domain              merchant domain; ALSO the value to send as merchantPreference.merchantName
+#                       (verified: every domain below resolves; display names often do NOT, e.g.
+#                       "Popular Bookstore" -> MERCHANT_NOT_RESOLVED, "popular.com.sg" -> OK).
+#   reap_merchant_name  exact products[].merchant.name returned by search; used to filter/attribute
+#                       offers. Empty = merchant not found in sandbox.
+#   priority            lower = more preferred (tie-breaker in ranking).
+#   allowed             may be bought from. office_relevant = returned products for office queries.
+#   probe_notes         what the probe found.
+vendors:
+  - domain: alchemist.com.sg
+    name: "Alchemist"
+    reap_merchant_name: "Alchemist"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "coffee beans"
+  - domain: anker.com.sg
+    name: "Anker"
+    reap_merchant_name: "---"
+    category: "Computers & Electronics"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "USB-C chargers, power banks, cables. Reap returns the literal merchant name '---' for this store; only trust it when searching with merchantPreference ONLY anker.com.sg"
+  - domain: bettrcoffee.com
+    name: "Bettr Coffee"
+    reap_merchant_name: "Bettr Coffee"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "coffee beans"
+  - domain: birdsofparadise.sg
+    name: "Birds of Paradise"
+    reap_merchant_name: "Birds of Paradise Gelato Boutique"
+    category: "Bakery & Desserts"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "gelato; not office-relevant"
+  - domain: boxgreen.co
+    name: "Boxgreen"
+    reap_merchant_name: "Boxgreen"
+    category: "Office & Business Supplies"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "snack boxes, nut mixes"
+  - domain: brewlander.com
+    name: "Brewlander"
+    reap_merchant_name: "Brewlander"
+    category: "Drinks & Alcohol"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "beer; not office-relevant"
+  - domain: byndartisan.com
+    name: "Bynd Artisan"
+    reap_merchant_name: "Bynd Artisan"
+    category: "Books & Stationery"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "premium notebooks"
+  - domain: camelnuts.com
+    name: "Camel Nuts"
+    reap_merchant_name: "Camel Nuts"
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "mixed nuts, snacks"
+  - domain: commonmancoffeeroasters.com
+    name: "Common Man Coffee Roasters"
+    reap_merchant_name: "Common Man Coffee Roasters SG"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "coffee beans, capsules, drip bags"
+  - domain: dutchcolony.sg
+    name: "Dutch Colony Coffee Co."
+    reap_merchant_name: "Dutch Colony Coffee Co."
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "coffee beans"
+  - domain: ergotune.com
+    name: "ErgoTune"
+    reap_merchant_name: "ErgoTune"
+    category: "Office & Business Supplies"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "ergonomic chairs, monitor arms, desks"
+  - domain: forewordcoffee.com
+    name: "Foreword Coffee"
+    reap_merchant_name: "Foreword Coffee"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "coffee"
+  - domain: gloriousgaming.com
+    name: "Glorious"
+    reap_merchant_name: "Glorious"
+    category: "Computers & Electronics"
+    country: US
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "mice, keyboards (US store, SGD prices)"
+  - domain: greatjonesgoods.com
+    name: "Great Jones"
+    reap_merchant_name: ""
+    category: "Kitchen & Dining"
+    country: US
+    allowed: false
+    office_relevant: false
+    priority: 90
+    probe_notes: "NOT FOUND in Reap sandbox (no products for brand or domain preference)"
+  - domain: gryphontea.com
+    name: "Gryphon Tea"
+    reap_merchant_name: "Gryphon Singapore"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "tea"
+  - domain: huggscoffee.com
+    name: "Huggs Coffee"
+    reap_merchant_name: "Huggs Coffee"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "coffee, canned coffee"
+  - domain: intertech-hardware.com
+    name: "Intertech Hardware"
+    reap_merchant_name: "Intertech Hardware Singapore"
+    category: "Home Appliances & DIY"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "hand sanitiser, cleaners, garbage bags"
+  - domain: irvinsaltedegg.com
+    name: "IRVINS"
+    reap_merchant_name: "IRVINS SG"
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "salted egg chips"
+  - domain: janicewong.online
+    name: "Janice Wong"
+    reap_merchant_name: "Janice Wong Singapore"
+    category: "Bakery & Desserts"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "desserts"
+  - domain: journeyeast.com
+    name: "Journey East"
+    reap_merchant_name: "Journey East"
+    category: "Home & Living"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "furniture; expensive"
+  - domain: kinokuniya.com.sg
+    name: "Kinokuniya"
+    reap_merchant_name: "Books Kinokuniya Singapore"
+    category: "Books & Stationery"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 20
+    probe_notes: "stationery, notebooks, envelopes, paper"
+  - domain: kohepets.com.sg
+    name: "Kohepets"
+    reap_merchant_name: "Kohepets"
+    category: "Pets"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "pet supplies"
+  - domain: kydra.co
+    name: "KYDRA"
+    reap_merchant_name: "KYDRA"
+    category: "Fashion & Apparel"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "apparel"
+  - domain: lux-lumens.sg
+    name: "Lux-lumens"
+    reap_merchant_name: "Lux-lumens"
+    category: "Home & Living"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "lighting"
+  - domain: metro.com.sg
+    name: "Metro"
+    reap_merchant_name: "Metro Singapore Departmental Store - Celebrating 69 Years in SG"
+    category: "Department Stores & Marketplaces"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "hand wash, kitchenware, mugs"
+  - domain: motherswork.com.sg
+    name: "Motherswork"
+    reap_merchant_name: "Motherswork"
+    category: "Baby & Kids"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "baby & kids"
+  - domain: parchmen.co
+    name: "Parchmen & Co"
+    reap_merchant_name: "Parchmen & Co"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "coffee"
+  - domain: pazzion.com
+    name: "PAZZION"
+    reap_merchant_name: "PAZZION"
+    category: "Footwear & Bags"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "footwear"
+  - domain: picketandrail.com
+    name: "Picket & Rail"
+    reap_merchant_name: "P&R Custom Furniture, Leather Sofa & Interiors"
+    category: "Office & Business Supplies"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "furniture; expensive"
+  - domain: plainvanilla.com.sg
+    name: "Plain Vanilla"
+    reap_merchant_name: "Plain Vanilla Online"
+    category: "Bakery & Desserts"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "cookies, pantry treats"
+  - domain: popular.com.sg
+    name: "Popular Bookstore"
+    reap_merchant_name: "Popular Bookstore"
+    category: "Books & Stationery"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "copier paper, pens, staplers, files, batteries; best stationery coverage"
+  - domain: pppcoffee.com
+    name: "PPP Coffee"
+    reap_merchant_name: "PPP Coffee"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "drip bags, coffee"
+  - domain: prismplus.sg
+    name: "PRISM+"
+    reap_merchant_name: "PRISM+ Singapore"
+    category: "Computers & Electronics"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "monitors"
+  - domain: prycetea.com
+    name: "Pryce Tea"
+    reap_merchant_name: "Pryce Tea"
+    category: "Coffee & Tea"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "tea"
+  - domain: pupsik.sg
+    name: "Pupsik"
+    reap_merchant_name: "Pupsik Singapore"
+    category: "Health & Wellness"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "wet wipes, hand sanitiser"
+  - domain: scanteak.com.sg
+    name: "Scanteak"
+    reap_merchant_name: "Scanteak"
+    category: "Home & Living"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "furniture"
+  - domain: sg.allies.shop
+    name: "Allies of Skin"
+    reap_merchant_name: "ALLIES [APAC]"
+    category: "Beauty & Personal Care"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "skincare"
+  - domain: shoppy.sg
+    name: "Shoppy"
+    reap_merchant_name: "Shoppy"
+    category: "Department Stores & Marketplaces"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "cleaning cloths, trash bags, household"
+  - domain: sixeleven.xyz
+    name: "Six Eleven"
+    reap_merchant_name: "Six Eleven"
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "gourmet pantry"
+  - domain: spectrumstore.sg
+    name: "Spectrum Store"
+    reap_merchant_name: "Spectrum Store"
+    category: "Gifts & Flowers"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "hand soap"
+  - domain: supernature.com.sg
+    name: "Supernature"
+    reap_merchant_name: "Supernature"
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "organic grocery"
+  - domain: thefishwives.com
+    name: "The Fishwives"
+    reap_merchant_name: "The Fishwives Singapore"
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "seafood"
+  - domain: thegoldenduck.co
+    name: "The Golden Duck Co."
+    reap_merchant_name: "The Golden Duck Co."
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 50
+    probe_notes: "salted egg snacks"
+  - domain: thesocialspace.co
+    name: "The Social Space"
+    reap_merchant_name: "The Social Space Pte Ltd"
+    category: "Home & Living"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "lifestyle"
+  - domain: thetinselrack.com
+    name: "The Tinsel Rack"
+    reap_merchant_name: "The Tinsel Rack"
+    category: "Fashion & Apparel"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "apparel"
+  - domain: toyster.sg
+    name: "Toyster"
+    reap_merchant_name: "Toyster Universe Singapore"
+    category: "Toys & Games"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "toys"
+  - domain: ugreen.com.sg
+    name: "UGREEN"
+    reap_merchant_name: "UGREEN SG"
+    category: "Computers & Electronics"
+    country: SG
+    allowed: true
+    office_relevant: true
+    priority: 10
+    probe_notes: "USB-C cables, HDMI cables, hubs"
+  - domain: windflowerflorist.com
+    name: "Windflower Florist"
+    reap_merchant_name: "Windflower Florist"
+    category: "Gifts & Flowers"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "flowers"
+  - domain: worldpolo.sg
+    name: "World Polo"
+    reap_merchant_name: "World Polo Luggage and Travel Bags Singapore"
+    category: "Footwear & Bags"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "luggage"
+  - domain: zenxin.com.sg
+    name: "Zenxin Organic"
+    reap_merchant_name: "ZENXIN ORGANIC"
+    category: "Grocery & Pantry"
+    country: SG
+    allowed: true
+    office_relevant: false
+    priority: 90
+    probe_notes: "organic grocery"

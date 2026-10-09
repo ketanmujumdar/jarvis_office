@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Jarvis Office procurement agent">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Jarvis Office">
+  <meta name="theme-color" content="#4F46E5">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Jarvis Office</title>
+  <style>
+    /* Minimal splash while the Flutter engine loads; removed on first frame. */
+    html, body { margin: 0; height: 100%; background: #F8FAFC; }
+    @media (prefers-color-scheme: dark) { html, body { background: #0F172A; } }
+    #splash { position: fixed; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      font: 600 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; color: #64748B;
+      transition: opacity .25s ease; }
+    #splash .mark { width: 56px; height: 56px; border-radius: 16px;
+      background: linear-gradient(135deg, #6366F1, #4F46E5); display: flex;
+      align-items: center; justify-content: center; gap: 4px; }
+    #splash .mark span { width: 4px; border-radius: 2px; background: #fff;
+      animation: wave 1s ease-in-out infinite; }
+    #splash .mark span:nth-child(1) { height: 14px; animation-delay: -.4s; }
+    #splash .mark span:nth-child(2) { height: 26px; animation-delay: -.2s; }
+    #splash .mark span:nth-child(3) { height: 18px; }
+    #splash .mark span:nth-child(4) { height: 24px; animation-delay: -.3s; }
+    @keyframes wave { 50% { transform: scaleY(.45); } }
+    @media (prefers-reduced-motion: reduce) { #splash .mark span { animation: none; } }
+  </style>
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div id="splash" aria-label="Loading Jarvis Office">
+    <div class="mark"><span></span><span></span><span></span><span></span></div>
+    <div>Jarvis Office</div>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var s = document.getElementById('splash');
+      if (!s) return;
+      s.style.opacity = '0';
+      setTimeout(function () { s.remove(); }, 300);
+    });
+  </script>
+  <!--
+    You can customize the "flutter_bootstrap.js" script.
+    This is useful to provide a custom configuration to the Flutter loader
+    or to give the user feedback during the initialization process.
+
+    For more details:
+    * https://docs.flutter.dev/platform-integration/web/initialization
+  -->
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+[   52428ms] [ERROR] Null check operator used on a null value @ http://127.0.0.1:8890/main.dart.js:34280
+[   52429ms] [ERROR]     at azy.LC (http://127.0.0.1:8890/main.dart.js:42021:11)
+    at aBD.kD (http://127.0.0.1:8890/main.dart.js:42441:3)
+    at aBi.aBL (http://127.0.0.1:8890/main.dart.js:42511:10)
+    at TB.asv (http://127.0.0.1:8890/main.dart.js:37820:38)
+    at aHD.Gi (http://127.0.0.1:8890/main.dart.js:81532:8)
+    at http://127.0.0.1:8890/main.dart.js:82036:11
+    at aTo.a (http://127.0.0.1:8890/main.dart.js:5283:63)
+    at aTo.$2 (http://127.0.0.1:8890/main.dart.js:46112:14)
+    at Object.O (http://127.0.0.1:8890/main.dart.js:5269:10)
+    at iO.anp (http://127.0.0.1:8890/main.dart.js:82046:10) @ http://127.0.0.1:8890/main.dart.js:34280
+[   52516ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/api/v1/enrollments/current:0
+[   91132ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/api/v1/enrollments/current:0
+[  174026ms] [ERROR] Null check operator used on a null value @ http://127.0.0.1:8890/main.dart.js:34280
+[  174026ms] [ERROR]     at azy.LC (http://127.0.0.1:8890/main.dart.js:42021:11)
+    at aBD.kD (http://127.0.0.1:8890/main.dart.js:42441:3)
+    at aBi.aBL (http://127.0.0.1:8890/main.dart.js:42511:10)
+    at TB.asv (http://127.0.0.1:8890/main.dart.js:37820:38)
+    at aHD.Gi (http://127.0.0.1:8890/main.dart.js:81532:8)
+    at http://127.0.0.1:8890/main.dart.js:82036:11
+    at aTo.a (http://127.0.0.1:8890/main.dart.js:5283:63)
+    at aTo.$2 (http://127.0.0.1:8890/main.dart.js:46112:14)
+    at Object.O (http://127.0.0.1:8890/main.dart.js:5269:10)
+    at iO.anp (http://127.0.0.1:8890/main.dart.js:82046:10) @ http://127.0.0.1:8890/main.dart.js:34280
+[  174125ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/api/v1/enrollments/current:0
+[  259136ms] [ERROR] Failed to load resource: net::ERR_INCOMPLETE_CHUNKED_ENCODING @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  262140ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  265144ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  268149ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  271153ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  274156ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  277160ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  280164ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  283168ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  286174ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  289177ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  292181ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  295185ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  298187ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  301192ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  304196ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  307200ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  310202ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  313206ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  316209ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  319212ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  322217ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  325220ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  328224ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  331228ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  334231ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  337235ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  340237ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  343240ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  346243ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  349245ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  352248ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  355251ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  358254ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  361256ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  364261ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  367264ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  370267ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  373271ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  376276ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  379280ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  382284ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  385288ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  388292ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  391295ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  394300ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  397303ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  400307ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  403310ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  406316ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  409319ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  412321ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  415324ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  418328ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  421331ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  424336ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  427339ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  430344ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  433348ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  436350ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  439354ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  442358ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  445361ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  448363ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  451367ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  454371ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  457375ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  460377ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  463379ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  466383ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  469387ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  472391ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  475393ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  478397ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  481401ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  484404ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  487408ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  490410ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  493412ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  496416ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  499419ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  502423ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  505426ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  508429ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  511432ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  514434ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  517438ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  520440ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  523442ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  526444ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  529447ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  532451ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  535455ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  538459ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  541464ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  544467ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  547471ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  550473ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  553475ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  556479ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  559483ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  562487ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  565491ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  568494ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  571499ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  574503ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  577507ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  580510ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  583513ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  586517ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  589522ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  592526ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  595531ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  598533ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  601535ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  604539ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  607544ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  610547ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  613552ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  616555ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  619558ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  622562ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  625566ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  628569ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  631573ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  634578ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  637582ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  640586ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  643590ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  646593ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  649597ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  652599ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  655603ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  658605ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  661610ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  664614ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  667619ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  670623ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  673629ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  676633ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  679636ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  682639ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  685643ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  688645ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  691649ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  694653ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  697657ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  700660ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  703664ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  706669ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  709673ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  712679ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  715683ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  718685ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  721687ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  724693ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  727697ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  730700ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  733703ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  736707ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  739709ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  742713ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  745717ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  748720ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  751723ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  754727ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  757730ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  760735ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  763738ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  766742ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  769747ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  772751ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  775844ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  778848ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  781853ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  784858ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  787862ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  790867ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  793871ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  796875ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  799878ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  802880ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  805885ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  808887ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  811892ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  814896ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  817899ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  820904ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  823908ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  826913ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  829917ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  832923ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  835928ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  838933ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  841938ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  844941ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  847943ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  850948ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  853953ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  856956ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  859959ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  862963ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  865965ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  868969ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  871974ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  874975ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  877979ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  880982ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  883985ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  886988ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  889990ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  892994ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  895996ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  899000ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  902003ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  905005ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  908008ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  911012ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  914016ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  917020ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  920022ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  923024ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  926027ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  929031ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  932035ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0
+[  935037ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:8080/api/v1/events?request_id=99e0e070-7e38-46e0-842e-8ae9d994a3d5&token=2a0789d1-f0f9-4b4d-8d92-9d5be01fd02f:0

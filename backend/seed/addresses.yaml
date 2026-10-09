@@ -1,0 +1,69 @@
+# Singapore delivery addresses (seed). Field names map 1:1 onto Reap quote shippingAddress
+# (firstName, lastName, phone E.164 ^\+[1-9]\d{6,14}$, addressLine1, addressLine2, city, postalCode, country).
+# Buildings are real public office buildings; units, contacts and phone numbers are fictional demo data.
+addresses:
+  - key: hq-marina
+    label: HQ - Marina One
+    first_name: Maya
+    last_name: Tan
+    phone: "+6562001001"
+    email: maya.tan@example.com
+    address_line1: 7 Straits View
+    address_line2: "#20-01 Marina One East Tower"
+    city: Singapore
+    region: ""
+    postal_code: "018936"
+    country: SG
+    is_default: true
+  - key: one-north
+    label: R&D Studio - one-north
+    first_name: Arjun
+    last_name: Menon
+    phone: "+6562001002"
+    email: arjun.menon@example.com
+    address_line1: 1 Fusionopolis Way
+    address_line2: "#10-05 Connexis North Tower"
+    city: Singapore
+    region: ""
+    postal_code: "138632"
+    country: SG
+    is_default: false
+  - key: paya-lebar
+    label: Sales Office - Paya Lebar Quarter
+    first_name: Siti
+    last_name: Rahman
+    phone: "+6562001003"
+    email: siti.rahman@example.com
+    address_line1: 10 Paya Lebar Road
+    address_line2: "#08-12 PLQ 1"
+    city: Singapore
+    region: ""
+    postal_code: "409057"
+    country: SG
+    is_default: false
+  - key: jurong-east
+    label: West Hub - Jurong East
+    first_name: Kenneth
+    last_name: Ong
+    phone: "+6562001004"
+    email: kenneth.ong@example.com
+    address_line1: 50 Jurong Gateway Road
+    address_line2: "#12-03 JEM Office Tower"
+    city: Singapore
+    region: ""
+    postal_code: "608549"
+    country: SG
+    is_default: false
+  - key: changi-bp
+    label: Ops Centre - Changi Business Park
+    first_name: Grace
+    last_name: Lee
+    phone: "+6562001005"
+    email: grace.lee@example.com
+    address_line1: 2 Changi Business Park Avenue 1
+    address_line2: "#04-01"
+    city: Singapore
+    region: ""
+    postal_code: "486015"
+    country: SG
+    is_default: false

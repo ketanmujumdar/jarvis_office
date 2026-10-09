@@ -1,0 +1,29 @@
+- generic [active] [ref=e5]:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - banner [ref=e16]
+            - button "Account MT" [ref=e17]
+          - generic:
+            - generic:
+              - group:
+                - generic [ref=e18]: Assistant
+                - generic [ref=e19]: Talk or type to restock the office.
+                - button "Start voice session" [ref=e20]
+                - generic [ref=e21]: Jarvis
+                - generic [ref=e22]: "Status: Tap to talk"
+                - generic [ref=e23]: Text mode
+                - group:
+                  - generic [ref=e24]: What does the office need?
+                  - generic [ref=e25]: Tap the mic to talk, or try one of these.
+                  - checkbox "Restock the usual coffee beans and A4 paper" [ref=e26]
+                  - checkbox "We need 6 boxes of tissues and 2 dish soaps, urgent" [ref=e27]
+                  - checkbox "Order 3 USB-C chargers for the meeting rooms" [ref=e28]
+                - textbox "e.g. “Restock coffee and printer paper”" [ref=e30]
+                - button "Send" [ref=e31]
+                - generic [ref=e32]: No request yet When you ask for supplies, the parsed items, best prices across approved vendors and checkout status appear here live.
+          - tablist:
+            - tab "Assistant" [selected] [ref=e33]
+            - tab "Orders" [ref=e34]

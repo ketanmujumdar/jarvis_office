@@ -1,0 +1,1287 @@
+openapi: 3.1.0
+info:
+  title: Jarvis Office API
+  version: 0.1.0
+  description: |
+    REST + SSE contract between the Flutter app and the Go api service (backend/cmd/api).
+
+    Conventions
+    - Base path `/api/v1`. JSON request/response bodies. Times are RFC 3339 UTC.
+    - Money is integer **cents of SGD** in fields ending `_cents` (e.g. 3550 = S$35.50).
+    - Fake auth: `POST /auth/login {email}` returns `{token, user}`; send `Authorization: Bearer <token>`
+      on every other call. The token is the user id. There is no real security (demo only).
+    - Roles: `manager` (create/confirm requests), `approver` (approve/reject), `admin` (everything,
+      including `/admin/*`).
+    - Errors use `ErrorResponse` with codes: validation_failed (400), unauthorized (401),
+      forbidden (403), not_found (404), conflict | invalid_transition | no_active_enrollment (409),
+      upstream_error (502), not_implemented (501), internal (500).
+    - Request status machine: parsing -> searching -> quoted -> (confirm) -> approved | pending_approval
+      -> approved -> checking_out -> awaiting_payment -> paying -> ordered; or rejected / failed / cancelled.
+      A live-quote price drift above policy moves checking_out -> pending_approval (kind price_drift).
+servers:
+  - url: http://localhost:8080
+security:
+  - bearerAuth: []
+tags:
+  - name: auth
+  - name: requests
+  - name: events
+  - name: approvals
+  - name: orders
+  - name: agent
+  - name: enrollment
+  - name: admin
+  - name: system
+
+paths:
+  /healthz:
+    get:
+      tags: [system]
+      security: []
+      summary: Liveness + DB check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: ok }
+                  db: { type: string, example: ok }
+        '503': { description: DB unreachable }
+
+  # ---------------- auth (fake) ----------------
+  /api/v1/auth/login:
+    post:
+      tags: [auth]
+      security: []
+      summary: Fake login by email (no password)
+      description: |
+        `{email}` logs in an existing (seeded) user. If the email is unknown or omitted and both `name`
+        and `role` are given, a demo user is created on the fly ("any name"). Also sets the
+        `jarvis_token` cookie (HttpOnly; value = token), accepted like the Bearer header.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+                name: { type: string, description: 'with role: create/login a demo user by name' }
+                role: { $ref: '#/components/schemas/Role' }
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/LoginResponse' }
+        '404': { $ref: '#/components/responses/Error' }
+  /api/v1/auth/me:
+    get:
+      tags: [auth]
+      summary: Current user
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/User' }
+        '401': { $ref: '#/components/responses/Error' }
+  /api/v1/auth/users:
+    get:
+      tags: [auth]
+      security: []
+      summary: Demo users for the login picker
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users: { type: array, items: { $ref: '#/components/schemas/User' } }
+
+  # ---------------- requests ----------------
+  /api/v1/requests:
+    post:
+      tags: [requests]
+      summary: Create a purchase request (returns immediately in status parsing; progress via SSE)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateRequestBody' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PurchaseRequest' }
+        '400': { $ref: '#/components/responses/Error' }
+    get:
+      tags: [requests]
+      summary: List requests (newest first)
+      parameters:
+        - name: status
+          in: query
+          description: Comma-separated statuses filter
+          schema: { type: string, example: 'quoted,pending_approval' }
+        - name: mine
+          in: query
+          schema: { type: boolean }
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requests: { type: array, items: { $ref: '#/components/schemas/PurchaseRequest' } }
+  /api/v1/requests/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [requests]
+      summary: Request detail (line items, ranked offers, approvals, payments, address)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RequestDetail' }
+        '404': { $ref: '#/components/responses/Error' }
+  /api/v1/requests/{id}/confirm:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [requests]
+      summary: Confirm a quoted request for a delivery address
+      description: |
+        Valid only in status `quoted`. Moves to `approved` (then checkout starts automatically) or to
+        `pending_approval`. Returns 409 `no_active_enrollment` if no card is enrolled yet.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [address_id]
+              properties:
+                address_id: { type: string, format: uuid }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RequestDetail' }
+        '400': { $ref: '#/components/responses/Error' }
+        '404': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /api/v1/requests/{id}/cancel:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [requests]
+      summary: Cancel (not allowed once paying)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RequestDetail' }
+        '409': { $ref: '#/components/responses/Error' }
+  /api/v1/requests/{id}/checkout:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [requests]
+      summary: Checkout/payment status for a request (from DB; cheap to poll)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckoutStatus' }
+  /api/v1/requests/{id}/checkout/refresh:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [requests]
+      summary: Poll Reap GET /agentic/checkouts/:id now for in-flight payments and apply changes
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CheckoutStatus' }
+        '502': { $ref: '#/components/responses/Error' }
+  /api/v1/requests/{id}/audit:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [requests]
+      summary: Audit trail of one request (oldest first)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events: { type: array, items: { $ref: '#/components/schemas/AuditEvent' } }
+
+  # ---------------- events (SSE) ----------------
+  /api/v1/events:
+    get:
+      tags: [events]
+      summary: Server-Sent Events stream
+      description: |
+        `text/event-stream`. Each message has `id: <int>`, `event: <type>` and `data: <SseEvent JSON>`.
+        Filter with `request_id`; omit to receive all events (approver console, dashboards).
+        Browsers' EventSource cannot set headers, so the token may also be passed as `?token=`.
+        A `heartbeat` event is sent every 15 s. Delivery is best-effort; on reconnect re-fetch
+        `GET /requests/{id}`.
+      parameters:
+        - name: request_id
+          in: query
+          schema: { type: string, format: uuid }
+        - name: token
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Event stream
+          content:
+            text/event-stream:
+              schema: { $ref: '#/components/schemas/SseEvent' }
+
+  # ---------------- approvals ----------------
+  /api/v1/approvals:
+    get:
+      tags: [approvals]
+      summary: Approval queue (approver/admin)
+      parameters:
+        - name: status
+          in: query
+          schema: { $ref: '#/components/schemas/ApprovalStatus' }
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  approvals: { type: array, items: { $ref: '#/components/schemas/ApprovalView' } }
+        '403': { $ref: '#/components/responses/Error' }
+  /api/v1/approvals/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [approvals]
+      summary: One approval with reasons and the top 3 quotes per line
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ApprovalView' }
+  /api/v1/approvals/{id}/approve:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [approvals]
+      summary: Approve (approver/admin). The request continues to checkout automatically.
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DecisionBody' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Approval' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /api/v1/approvals/{id}/reject:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    post:
+      tags: [approvals]
+      summary: Reject (approver/admin). The request moves to rejected.
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DecisionBody' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Approval' }
+        '403': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+
+  # ---------------- orders, spend, audit ----------------
+  /api/v1/orders:
+    get:
+      tags: [orders]
+      summary: Order history (requests that reached checkout or later, newest first)
+      parameters:
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders: { type: array, items: { $ref: '#/components/schemas/OrderSummary' } }
+  /api/v1/spend/monthly:
+    get:
+      tags: [orders]
+      summary: Completed spend per month vs budget (for charts)
+      parameters:
+        - name: months
+          in: query
+          schema: { type: integer, default: 6, minimum: 1, maximum: 24 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SpendSummary' }
+  /api/v1/audit:
+    get:
+      tags: [orders]
+      summary: Global audit log (newest first)
+      parameters:
+        - name: type
+          in: query
+          description: Exact type or prefix ending with "." (e.g. "reap.")
+          schema: { type: string }
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  events: { type: array, items: { $ref: '#/components/schemas/AuditEvent' } }
+
+  # ---------------- read-only lookups for any role ----------------
+  /api/v1/catalog:
+    get:
+      tags: [requests]
+      summary: Active catalog items (read-only)
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items: { type: array, items: { $ref: '#/components/schemas/CatalogItem' } }
+  /api/v1/addresses:
+    get:
+      tags: [requests]
+      summary: Delivery addresses (read-only; default first)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses: { type: array, items: { $ref: '#/components/schemas/Address' } }
+
+  # ---------------- agent (text + voice tools) ----------------
+  /api/v1/agent/chat:
+    post:
+      tags: [agent]
+      summary: One text-agent turn (same tools and system prompt as voice)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                session_id: { type: string, description: 'omit to start a new session' }
+                message: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ChatOutput' }
+        '502': { $ref: '#/components/responses/Error' }
+  /api/v1/agent/sessions/{id}/messages:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [agent]
+      summary: Transcript of a text session
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages: { type: array, items: { $ref: '#/components/schemas/ChatMessage' } }
+  /api/v1/agent/tools:
+    get:
+      tags: [agent]
+      summary: Tool definitions (JSON schema) given to the model
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tools: { type: array, items: { $ref: '#/components/schemas/ToolDefinition' } }
+  /api/v1/agent/tools/{name}:
+    parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+          enum: [create_order_request, get_request_status, list_addresses, confirm_order, cancel_request]
+    post:
+      tags: [agent]
+      summary: Execute a tool call relayed from the Realtime voice session
+      description: |
+        The browser receives `response.function_call_arguments.done` from OpenAI Realtime, POSTs the
+        arguments here, and sends the returned `output` back as a `function_call_output` item.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [arguments]
+              properties:
+                call_id: { type: string }
+                session_id: { type: string }
+                arguments:
+                  description: Raw JSON object from the model (object or JSON-encoded string)
+                  oneOf:
+                    - type: object
+                    - type: string
+      responses:
+        '200':
+          description: Tool result (tool-level errors are returned as output.error, still 200)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  call_id: { type: string }
+                  output: { type: object, additionalProperties: true }
+        '404': { $ref: '#/components/responses/Error' }
+  /api/v1/realtime/session:
+    post:
+      tags: [agent]
+      summary: Mint a short-lived OpenAI Realtime client secret (instructions = DB system prompt)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/RealtimeSession' }
+        '502': { $ref: '#/components/responses/Error' }
+
+  # ---------------- card enrollment ----------------
+  /api/v1/enrollments:
+    post:
+      tags: [enrollment]
+      summary: Start a Reap EXTERNAL card enrollment; open next_action_url (hosted card-entry page)
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Enrollment' }
+        '502': { $ref: '#/components/responses/Error' }
+  /api/v1/enrollments/current:
+    get:
+      tags: [enrollment]
+      summary: Latest enrollment, refreshed from Reap while not terminal
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Enrollment' }
+        '404': { $ref: '#/components/responses/Error' }
+
+  # ---------------- admin (role admin) ----------------
+  /api/v1/admin/catalog:
+    get:
+      tags: [admin]
+      summary: All catalog items (including inactive)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items: { type: array, items: { $ref: '#/components/schemas/CatalogItem' } }
+    post:
+      tags: [admin]
+      summary: Create catalog item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CatalogItemInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CatalogItem' }
+        '400': { $ref: '#/components/responses/Error' }
+        '409': { $ref: '#/components/responses/Error' }
+  /api/v1/admin/catalog/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [admin]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CatalogItem' }
+    put:
+      tags: [admin]
+      summary: Replace catalog item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CatalogItemInput' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/CatalogItem' }
+    delete:
+      tags: [admin]
+      responses:
+        '204': { description: Deleted }
+  /api/v1/admin/vendors:
+    get:
+      tags: [admin]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vendors: { type: array, items: { $ref: '#/components/schemas/Vendor' } }
+    post:
+      tags: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/VendorInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Vendor' }
+  /api/v1/admin/vendors/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [admin]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Vendor' }
+    put:
+      tags: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/VendorInput' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Vendor' }
+    delete:
+      tags: [admin]
+      responses:
+        '204': { description: Deleted }
+  /api/v1/admin/policy:
+    get:
+      tags: [admin]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PolicyConfig' }
+    put:
+      tags: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PolicyInput' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PolicyConfig' }
+  /api/v1/admin/addresses:
+    get:
+      tags: [admin]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses: { type: array, items: { $ref: '#/components/schemas/Address' } }
+    post:
+      tags: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddressInput' }
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+  /api/v1/admin/addresses/{id}:
+    parameters: [ { $ref: '#/components/parameters/Id' } ]
+    get:
+      tags: [admin]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+    put:
+      tags: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddressInput' }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Address' }
+    delete:
+      tags: [admin]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Error' }
+  /api/v1/admin/system-prompt:
+    get:
+      tags: [admin]
+      summary: The agent system prompt (used by text agent and realtime session)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SystemPrompt' }
+    put:
+      tags: [admin]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content: { type: string, minLength: 1 }
+      responses:
+        '200':
+          description: OK (version incremented)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/SystemPrompt' }
+
+  /api/v1/admin/system-prompt/default:
+    get:
+      tags: [admin]
+      summary: The seeded default agent prompt (seed/system_prompt.md). Read-only; the admin UI loads it into the editor for "Reset to default" and saves via PUT.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [key, content]
+                properties:
+                  key: { type: string, example: agent }
+                  content: { type: string }
+
+  # ---------------- webhooks (optional) ----------------
+  /api/v1/webhooks/reap:
+    post:
+      tags: [system]
+      security: []
+      summary: Reap webhook receiver (only when REAP_WEBHOOKS_ENABLED=true; verified via X-Reap-Webhook-Signature)
+      responses:
+        '200': { description: Accepted }
+        '400': { description: Bad signature }
+        '404': { description: Webhooks disabled }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Fake token = user id from POST /auth/login
+
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: string }
+    Limit:
+      name: limit
+      in: query
+      schema: { type: integer, default: 50, minimum: 1, maximum: 200 }
+    Offset:
+      name: offset
+      in: query
+      schema: { type: integer, default: 0, minimum: 0 }
+
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/ErrorResponse' }
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code:
+              type: string
+              enum: [validation_failed, unauthorized, forbidden, not_found, conflict, invalid_transition,
+                     no_active_enrollment, upstream_error, not_implemented, internal]
+            message: { type: string }
+
+    Role:
+      type: string
+      enum: [manager, approver, admin]
+    User:
+      type: object
+      required: [id, name, email, role]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        email: { type: string }
+        role: { $ref: '#/components/schemas/Role' }
+        created_at: { type: string, format: date-time }
+    LoginResponse:
+      type: object
+      required: [token, user]
+      properties:
+        token: { type: string }
+        user: { $ref: '#/components/schemas/User' }
+
+    RequestStatus:
+      type: string
+      enum: [parsing, searching, quoted, pending_approval, approved, checking_out, awaiting_payment,
+             paying, ordered, rejected, failed, cancelled]
+    Decision:
+      type: string
+      enum: [AUTO_APPROVE, NEEDS_APPROVAL, REJECT]
+    ReasonCode:
+      type: string
+      enum: [OFF_LIST, NOT_AUTO_APPROVE, OVER_UNIT_CEILING, OVER_ORDER_LIMIT, OVER_MONTHLY_BUDGET,
+             VENDOR_NOT_ALLOWED, NO_OFFER, PRICE_DRIFT, CURRENCY_MISMATCH]
+    Reason:
+      type: object
+      required: [code, message]
+      properties:
+        code: { $ref: '#/components/schemas/ReasonCode' }
+        message: { type: string }
+    Urgency:
+      type: string
+      enum: [normal, urgent]
+
+    CreateRequestBody:
+      type: object
+      required: [utterance]
+      properties:
+        utterance: { type: string, example: "We're out of printer paper and coffee pods, reorder the usual." }
+        items:
+          description: Optional pre-parsed items (skips LLM parsing)
+          type: array
+          items:
+            type: object
+            required: [description]
+            properties:
+              description: { type: string }
+              qty: { type: integer, minimum: 1 }
+              urgency: { $ref: '#/components/schemas/Urgency' }
+
+    PurchaseRequest:
+      type: object
+      required: [id, requester_id, raw_utterance, status, subtotal_cents, shipping_cents, total_cents, currency, created_at, updated_at]
+      properties:
+        id: { type: string, format: uuid }
+        requester_id: { type: string, format: uuid }
+        raw_utterance: { type: string }
+        status: { $ref: '#/components/schemas/RequestStatus' }
+        address_id: { type: [string, 'null'], format: uuid }
+        subtotal_cents: { type: integer, format: int64 }
+        shipping_cents: { type: integer, format: int64 }
+        total_cents: { type: integer, format: int64 }
+        currency: { type: string, example: SGD }
+        decision: { $ref: '#/components/schemas/Decision' }
+        failure_reason: { type: string }
+        confirmed_by: { type: [string, 'null'], format: uuid }
+        confirmed_at: { type: [string, 'null'], format: date-time }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    LineItem:
+      type: object
+      required: [id, request_id, position, description, qty, urgency, reasons]
+      properties:
+        id: { type: string, format: uuid }
+        request_id: { type: string, format: uuid }
+        position: { type: integer }
+        catalog_item_id: { type: [string, 'null'], format: uuid, description: 'null = off-list' }
+        description: { type: string }
+        qty: { type: integer }
+        urgency: { $ref: '#/components/schemas/Urgency' }
+        policy_decision: { $ref: '#/components/schemas/Decision' }
+        reasons: { type: array, items: { $ref: '#/components/schemas/Reason' } }
+        selected_offer_id: { type: [string, 'null'], format: uuid }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    Offer:
+      type: object
+      required: [id, line_item_id, merchant_name, reap_product_id, reap_variant_id, title, unit_price_cents, currency, pack_size, shipping_cents, landed_cost_cents, available, rank]
+      properties:
+        id: { type: string, format: uuid }
+        line_item_id: { type: string, format: uuid }
+        vendor_id: { type: [string, 'null'], format: uuid }
+        merchant_name: { type: string, example: Popular Bookstore }
+        reap_product_id: { type: string }
+        reap_variant_id: { type: string }
+        title: { type: string }
+        variant_name: { type: string }
+        image_url: { type: string }
+        url: { type: string }
+        unit_price_cents: { type: integer, format: int64 }
+        currency: { type: string }
+        pack_size: { type: integer }
+        shipping_cents: { type: integer, format: int64 }
+        landed_cost_cents: { type: integer, format: int64 }
+        eta: { type: string }
+        available: { type: boolean }
+        rank: { type: integer, description: '1 = best' }
+        created_at: { type: string, format: date-time }
+
+    ApprovalStatus:
+      type: string
+      enum: [pending, approved, rejected]
+    Approval:
+      type: object
+      required: [id, request_id, kind, status, reasons, amount_cents, created_at]
+      properties:
+        id: { type: string, format: uuid }
+        request_id: { type: string, format: uuid }
+        kind: { type: string, enum: [policy, price_drift] }
+        status: { $ref: '#/components/schemas/ApprovalStatus' }
+        reasons: { type: array, items: { $ref: '#/components/schemas/Reason' } }
+        amount_cents: { type: integer, format: int64 }
+        prev_cents: { type: [integer, 'null'], format: int64 }
+        approver_id: { type: [string, 'null'], format: uuid }
+        comment: { type: string }
+        decided_at: { type: [string, 'null'], format: date-time }
+        created_at: { type: string, format: date-time }
+    ApprovalView:
+      type: object
+      required: [approval, request, requester, lines]
+      properties:
+        approval: { $ref: '#/components/schemas/Approval' }
+        request: { $ref: '#/components/schemas/PurchaseRequest' }
+        requester: { $ref: '#/components/schemas/User' }
+        lines:
+          type: array
+          items:
+            type: object
+            required: [line_item, top_offers]
+            properties:
+              line_item: { $ref: '#/components/schemas/LineItem' }
+              catalog_item: { $ref: '#/components/schemas/CatalogItem' }
+              top_offers: { type: array, maxItems: 3, items: { $ref: '#/components/schemas/Offer' } }
+    DecisionBody:
+      type: object
+      properties:
+        comment: { type: string }
+
+    PaymentStatus:
+      type: string
+      enum: [quoting, quoted, requires_action, processing, completed, failed, expired]
+    Payment:
+      type: object
+      required: [id, request_id, merchant_name, items_cents, shipping_cents, tax_cents, quoted_cents, currency, status]
+      properties:
+        id: { type: string, format: uuid }
+        request_id: { type: string, format: uuid }
+        vendor_id: { type: [string, 'null'], format: uuid }
+        merchant_name: { type: string }
+        enrollment_id: { type: [string, 'null'], format: uuid }
+        reap_quote_id: { type: string }
+        reap_checkout_id: { type: string }
+        reap_order_id: { type: string, description: 'merchant order reference once completed' }
+        items_cents: { type: integer, format: int64 }
+        shipping_cents: { type: integer, format: int64 }
+        tax_cents: { type: integer, format: int64 }
+        quoted_cents: { type: integer, format: int64 }
+        final_cents: { type: [integer, 'null'], format: int64, description: 'amount actually charged' }
+        currency: { type: string }
+        status: { $ref: '#/components/schemas/PaymentStatus' }
+        approval_url: { type: string, description: 'Reap-hosted approval page; open it while requires_action' }
+        quote_expires_at: { type: [string, 'null'], format: date-time }
+        error: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    CheckoutStatus:
+      type: object
+      required: [request_id, status, payments]
+      properties:
+        request_id: { type: string, format: uuid }
+        status: { $ref: '#/components/schemas/RequestStatus' }
+        payments: { type: array, items: { $ref: '#/components/schemas/Payment' } }
+
+    RequestDetail:
+      type: object
+      required: [request, line_items, offers, approvals, payments]
+      properties:
+        request: { $ref: '#/components/schemas/PurchaseRequest' }
+        line_items: { type: array, items: { $ref: '#/components/schemas/LineItem' } }
+        offers: { type: array, items: { $ref: '#/components/schemas/Offer' } }
+        approvals: { type: array, items: { $ref: '#/components/schemas/Approval' } }
+        payments: { type: array, items: { $ref: '#/components/schemas/Payment' } }
+        address: { $ref: '#/components/schemas/Address' }
+
+    OrderSummary:
+      type: object
+      required: [request, payments]
+      properties:
+        request: { $ref: '#/components/schemas/PurchaseRequest' }
+        requester: { $ref: '#/components/schemas/User' }
+        approver: { $ref: '#/components/schemas/User' }
+        vendors: { type: array, items: { type: string }, description: 'merchant names' }
+        item_count: { type: integer }
+        payments: { type: array, items: { $ref: '#/components/schemas/Payment' } }
+    SpendSummary:
+      type: object
+      required: [currency, monthly_budget_cents, month_to_date_cents, months]
+      properties:
+        currency: { type: string }
+        monthly_budget_cents: { type: integer, format: int64 }
+        month_to_date_cents: { type: integer, format: int64 }
+        months:
+          type: array
+          items:
+            type: object
+            required: [month, spend_cents, orders]
+            properties:
+              month: { type: string, example: '2026-10' }
+              spend_cents: { type: integer, format: int64 }
+              orders: { type: integer }
+
+    AuditEvent:
+      type: object
+      required: [id, actor_type, type, at]
+      properties:
+        id: { type: integer, format: int64 }
+        request_id: { type: [string, 'null'], format: uuid }
+        actor_type: { type: string, enum: [user, agent, system] }
+        actor_id: { type: string }
+        type: { type: string, example: reap.checkout_created }
+        payload: { type: object, additionalProperties: true }
+        at: { type: string, format: date-time }
+
+    SseEventType:
+      type: string
+      enum: [request.created, request.status_changed, line_items.parsed, search.started, search.vendor_result,
+             offers.ranked, policy.evaluated, approval.requested, approval.decided, checkout.quoted,
+             checkout.price_drift, payment.action_required, payment.status_changed, order.completed,
+             enrollment.updated, agent.message, heartbeat]
+    SseEvent:
+      type: object
+      required: [id, type, at, data]
+      description: |
+        `data` per type:
+        - request.created: {request: PurchaseRequest}
+        - request.status_changed: {request_id, from, to, failure_reason?}
+        - line_items.parsed: {request_id, line_items: LineItem[]}
+        - search.started: {request_id, line_item_id, vendors: string[] (domains)}
+        - search.vendor_result: {request_id, line_item_id, vendor_domain, offers_found: int, error?}
+        - offers.ranked: {request_id, line_item_id, offers: Offer[] (top 3)}
+        - policy.evaluated: {request_id, decision, reasons: Reason[], lines: [{line_item_id, decision, reasons}], total_cents}
+        - approval.requested / approval.decided: {approval: Approval}
+        - checkout.quoted: {request_id, payment: Payment}
+        - checkout.price_drift: {request_id, approved_cents, live_cents, pct}
+        - payment.action_required: {request_id, payment: Payment, approval_url}
+        - payment.status_changed: {request_id, payment: Payment}
+        - order.completed: {request_id, payments: Payment[]}
+        - enrollment.updated: {enrollment: Enrollment}
+        - agent.message: {session_id, role, content}
+        - heartbeat: {}
+      properties:
+        id: { type: integer, format: int64 }
+        type: { $ref: '#/components/schemas/SseEventType' }
+        request_id: { type: string }
+        at: { type: string, format: date-time }
+        data: { type: object, additionalProperties: true }
+
+    ChatOutput:
+      type: object
+      required: [session_id, reply, request_ids, tool_calls]
+      properties:
+        session_id: { type: string }
+        reply: { type: string }
+        request_ids: { type: array, items: { type: string } }
+        tool_calls:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              arguments: { type: object, additionalProperties: true }
+              result: { type: object, additionalProperties: true }
+              error: { type: string }
+    ChatMessage:
+      type: object
+      required: [id, session_id, role, content, created_at]
+      properties:
+        id: { type: integer, format: int64 }
+        session_id: { type: string }
+        user_id: { type: string }
+        role: { type: string, enum: [system, user, assistant, tool] }
+        content: { type: string }
+        tool_calls: { type: array, items: { type: object, additionalProperties: true } }
+        tool_call_id: { type: string }
+        created_at: { type: string, format: date-time }
+    ToolDefinition:
+      type: object
+      required: [name, description, parameters]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        parameters: { type: object, additionalProperties: true, description: JSON Schema }
+    RealtimeSession:
+      type: object
+      required: [client_secret, expires_at, model, calls_url]
+      properties:
+        client_secret: { type: string, description: 'ephemeral; use as Bearer for the WebRTC SDP POST' }
+        expires_at: { type: string, format: date-time }
+        model: { type: string, example: gpt-realtime }
+        voice: { type: string, example: marin }
+        calls_url: { type: string, example: 'https://api.openai.com/v1/realtime/calls' }
+        tools: { type: array, items: { $ref: '#/components/schemas/ToolDefinition' } }
+
+    EnrollmentStatus:
+      type: string
+      enum: [REQUIRES_ACTION, ACTIVE, FAILED, EXPIRED, REVOKED]
+    Enrollment:
+      type: object
+      required: [id, reap_enrollment_id, status, created_at, updated_at]
+      description: No card data is ever stored or returned.
+      properties:
+        id: { type: string, format: uuid }
+        reap_enrollment_id: { type: string }
+        status: { $ref: '#/components/schemas/EnrollmentStatus' }
+        owner_ref: { type: string }
+        owner_email: { type: string }
+        next_action_url: { type: string, description: 'Reap-hosted card-entry page while REQUIRES_ACTION' }
+        created_by: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+
+    CatalogItem:
+      type: object
+      required: [id, sku, name, aliases, category, unit, default_qty, max_unit_price_cents, preferred_vendor_ids, auto_approve, search_query, active]
+      properties:
+        id: { type: string, format: uuid }
+        sku: { type: string }
+        name: { type: string }
+        aliases: { type: array, items: { type: string } }
+        category: { type: string }
+        unit: { type: string }
+        default_qty: { type: integer }
+        max_unit_price_cents: { type: integer, format: int64 }
+        preferred_vendor_ids: { type: array, items: { type: string, format: uuid }, description: 'ordered, most preferred first' }
+        auto_approve: { type: boolean }
+        search_query: { type: string }
+        active: { type: boolean }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    CatalogItemInput:
+      type: object
+      required: [sku, name, category, default_qty, max_unit_price_cents, preferred_vendor_ids]
+      properties:
+        sku: { type: string }
+        name: { type: string }
+        aliases: { type: array, items: { type: string } }
+        category: { type: string }
+        unit: { type: string }
+        default_qty: { type: integer, minimum: 1 }
+        max_unit_price_cents: { type: integer, format: int64, minimum: 0 }
+        preferred_vendor_ids: { type: array, minItems: 1, items: { type: string, format: uuid } }
+        auto_approve: { type: boolean, default: true }
+        search_query: { type: string }
+        active: { type: boolean, default: true }
+
+    Vendor:
+      type: object
+      required: [id, domain, name, reap_merchant_name, category, country, allowed, office_relevant, priority]
+      properties:
+        id: { type: string, format: uuid }
+        domain: { type: string, example: popular.com.sg }
+        name: { type: string }
+        reap_merchant_name: { type: string, description: 'exact products[].merchant.name from Reap search' }
+        category: { type: string }
+        country: { type: string }
+        allowed: { type: boolean }
+        office_relevant: { type: boolean }
+        priority: { type: integer, description: 'lower = more preferred' }
+        notes: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    VendorInput:
+      type: object
+      required: [domain, name]
+      properties:
+        domain: { type: string }
+        name: { type: string }
+        reap_merchant_name: { type: string }
+        category: { type: string }
+        country: { type: string, default: SG }
+        allowed: { type: boolean, default: true }
+        office_relevant: { type: boolean }
+        priority: { type: integer, default: 50 }
+        notes: { type: string }
+
+    PolicyConfig:
+      type: object
+      required: [currency, per_order_limit_cents, monthly_budget_cents, price_drift_pct]
+      properties:
+        currency: { type: string, example: SGD }
+        per_order_limit_cents: { type: integer, format: int64 }
+        monthly_budget_cents: { type: integer, format: int64 }
+        price_drift_pct: { type: number }
+        updated_at: { type: string, format: date-time }
+        updated_by: { type: string }
+    PolicyInput:
+      type: object
+      required: [per_order_limit_cents, monthly_budget_cents, price_drift_pct]
+      properties:
+        per_order_limit_cents: { type: integer, format: int64, minimum: 0 }
+        monthly_budget_cents: { type: integer, format: int64, minimum: 0 }
+        price_drift_pct: { type: number, minimum: 0, maximum: 100 }
+
+    Address:
+      type: object
+      required: [id, label, first_name, last_name, phone, email, address_line1, city, postal_code, country, is_default]
+      properties:
+        id: { type: string, format: uuid }
+        label: { type: string, example: HQ - Marina One }
+        first_name: { type: string }
+        last_name: { type: string }
+        phone: { type: string, pattern: '^\+[1-9]\d{6,14}$' }
+        email: { type: string }
+        address_line1: { type: string }
+        address_line2: { type: string }
+        city: { type: string }
+        region: { type: string }
+        postal_code: { type: string }
+        country: { type: string, example: SG }
+        is_default: { type: boolean }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    AddressInput:
+      type: object
+      required: [label, first_name, last_name, phone, email, address_line1, postal_code]
+      properties:
+        label: { type: string }
+        first_name: { type: string }
+        last_name: { type: string }
+        phone: { type: string, pattern: '^\+[1-9]\d{6,14}$' }
+        email: { type: string, format: email }
+        address_line1: { type: string }
+        address_line2: { type: string }
+        city: { type: string, default: Singapore }
+        region: { type: string }
+        postal_code: { type: string }
+        country: { type: string, default: SG }
+        is_default: { type: boolean }
+
+    SystemPrompt:
+      type: object
+      required: [key, content, version, updated_at]
+      properties:
+        key: { type: string, example: agent }
+        content: { type: string }
+        version: { type: integer }
+        updated_at: { type: string, format: date-time }
+        updated_by: { type: string }

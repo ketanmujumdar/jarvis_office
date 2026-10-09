@@ -1,0 +1,51 @@
+- generic [active] [ref=e5]:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic [ref=e35]: Jarvis
+            - generic [ref=e36]: Office procurement
+            - button "Assistant Tab 1 of 2" [ref=e37]
+            - button "Orders Tab 2 of 2" [ref=e38]
+            - button "Account MT Maya Tan manager" [ref=e39]
+          - generic:
+            - generic:
+              - group:
+                - generic [ref=e18]: Assistant
+                - button "New conversation" [ref=e53]
+                - generic [ref=e19]: Talk or type to restock the office.
+                - button "Start voice session" [ref=e40]
+                - generic [ref=e41]: Jarvis
+                - generic [ref=e42]: "Status: Tap to talk"
+                - generic [ref=e43]: Text mode
+                - generic:
+                  - group:
+                    - generic [ref=e54]: Restock the usual coffee beans and A4 paper
+                    - generic [ref=e55]: Created a purchase request
+                    - generic [ref=e56]: I've started request 7bbc1fcc-a3d5-4818-8748-e287bafb39c2 and I'm checking prices with our approved vendors.
+                - textbox "e.g. “Restock coffee and printer paper”" [ref=e51]
+                - button "Send" [ref=e52]
+                - generic [ref=e57]: Live request
+                - generic [ref=e58]: "“Restock the usual coffee beans and A4 paper” Status: Ready to confirm Understand, done Find prices, done Review, in progress 3 Approve 4 Pay 5 Ordered 6"
+                - button "Full view" [ref=e59]
+                - 'group "Deliver to Choose where this order should go before confirming. Status: No card Policy runs again on confirm. Payment is approved on Reap’s page."':
+                  - 'button "HQ - Marina One Default 7 Straits View, #20-01 Marina One East Tower, Singapore 018936 Attn: Maya Tan · +6562001001" [ref=e60]'
+                  - 'button "Ops Centre - Changi Business Park 2 Changi Business Park Avenue 1, #04-01, Singapore 486015 Attn: Grace Lee · +6562001005" [ref=e61]'
+                  - 'button "R&D Studio - one-north 1 Fusionopolis Way, #10-05 Connexis North Tower, Singapore 138632 Attn: Arjun Menon · +6562001002" [ref=e62]'
+                  - 'button "Sales Office - Paya Lebar Quarter 10 Paya Lebar Road, #08-12 PLQ 1, Singapore 409057 Attn: Siti Rahman · +6562001003" [ref=e63]'
+                  - 'button "West Hub - Jurong East 50 Jurong Gateway Road, #12-03 JEM Office Tower, Singapore 608549 Attn: Kenneth Ong · +6562001004" [ref=e64]'
+                  - button "Confirm S$143.00" [ref=e65]
+                - generic [ref=e66]: "Line items 2 items parsed from “Restock the usual coffee beans and A4 paper” ×4 Espresso Coffee Beans 250g Status: Pre-approved Catalog ×10 A4 Copier Paper 80gsm (500 sheets) Status: Pre-approved Catalog"
+                - group "Espresso Coffee Beans 250g Qty 4 · 4 offers compared MERCHANT UNIT SHIPPING TOTAL":
+                  - generic [ref=e67]: Best offer 1 Alchemist Best price Dark Matter Espresso Blend Coffee Beans 200g S$18.00 TBC S$72.00
+                  - generic [ref=e68]: 2 Dutch Colony Coffee Co. Dutch Colony Espresso Blend Coffee Beans 250g S$19.00 TBC S$76.00
+                  - generic [ref=e69]: 3 Common Man Coffee Roasters SG 22 Martin Espresso Blend Coffee Beans 250g · Whole Bean S$20.50 TBC S$82.00
+                  - generic [ref=e70]: 4 Bettr Coffee Bettr Barista Espresso Blend Coffee Beans 250g S$22.00 TBC S$88.00
+                - group "A4 Copier Paper 80gsm (500 sheets) Qty 10 · 4 offers compared MERCHANT UNIT SHIPPING TOTAL":
+                  - generic [ref=e71]: Best offer 1 Popular Bookstore Best price IK Signature Copier Paper 80g A4 500's S$7.10 TBC S$71.00
+                  - generic [ref=e72]: 2 Popular Bookstore PaperOne Copier Paper 80g A4 500's S$7.90 TBC S$79.00
+                  - generic [ref=e73]: 3 Books Kinokuniya Singapore Kinokuniya A4 Copier Paper 80gsm 500 sheets S$8.50 TBC S$85.00
+                  - generic [ref=e74]: 4 Popular Bookstore IK Signature Copier Paper 80g A4 500's (1 Carton) S$35.50 TBC S$355.00
+                - generic [ref=e75]: "Summary Status: Pre-approved Subtotal S$143.00 Shipping (est.) Calculated at checkout Total S$143.00"
+                - generic [ref=e76]: "Live activity Ready to confirm just now Policy: Pre-approved just now Best offer: Popular Bookstore just now IK Signature Copier Paper 80g A4 500's · S$71.00 Best offer: Alchemist just now Dark Matter Espresso Blend Coffee Beans 200g · S$72.00 popular.com.sg: 3 offers just now open: 4 offers just now bettrcoffee.com: 1 offer just now dutchcolony.sg: 1 offer just now open: 4 offers just now alchemist.com.sg: 1 offer just now commonmancoffeeroasters.com: 1 offer just now kinokuniya.com.sg: 1 offer just now"

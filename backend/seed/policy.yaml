@@ -1,0 +1,7 @@
+# Office spending policy (single row, editable in admin). Money is decimal SGD here; the loader
+# converts to integer cents. There is no approval expiry (MVP decision).
+policy:
+  currency: SGD
+  per_order_limit_sgd: 500.00      # request total (landed: items + shipping + tax) above this => NEEDS_APPROVAL
+  monthly_budget_sgd: 3000.00      # completed spend this calendar month (Asia/Singapore) + this order above this => NEEDS_APPROVAL
+  price_drift_pct: 5               # live Reap quote total vs approved total; above this % => back to approval

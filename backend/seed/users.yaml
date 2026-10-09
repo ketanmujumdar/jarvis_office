@@ -1,0 +1,15 @@
+# Demo users for the fake login (no real auth). role: manager | approver | admin.
+# An admin can also approve; a manager can only create/confirm requests.
+users:
+  - key: maya
+    name: Maya Tan
+    email: maya.tan@example.com
+    role: manager
+  - key: daniel
+    name: Daniel Lim
+    email: daniel.lim@example.com
+    role: approver
+  - key: priya
+    name: Priya Nair
+    email: priya.nair@example.com
+    role: admin

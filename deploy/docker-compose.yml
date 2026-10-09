@@ -1,0 +1,44 @@
+# Local stack: Postgres + the api service. Secrets come from backend/.env (never baked into images).
+#   make up        -> postgres only (api runs on the host with `make run`)
+#   make up-all    -> postgres + api container
+name: jarvis-office
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: jarvis
+      POSTGRES_PASSWORD: jarvis
+      POSTGRES_DB: jarvis
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jarvis -d jarvis"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  api:
+    profiles: ["api"]
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    env_file:
+      - path: ../backend/.env
+        required: false
+    environment:
+      DATABASE_URL: postgres://jarvis:jarvis@postgres:5432/jarvis?sslmode=disable
+      HTTP_ADDR: ":8080"
+      SEED_DIR: /app/seed
+      DOTENV: ""
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:

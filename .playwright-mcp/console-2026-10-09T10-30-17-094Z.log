@@ -1,0 +1,13 @@
+[   48716ms] [ERROR] Null check operator used on a null value @ http://127.0.0.1:8890/main.dart.js:34280
+[   48716ms] [ERROR]     at azy.LC (http://127.0.0.1:8890/main.dart.js:42021:11)
+    at aBD.kD (http://127.0.0.1:8890/main.dart.js:42441:3)
+    at aBi.aBL (http://127.0.0.1:8890/main.dart.js:42511:10)
+    at TB.asv (http://127.0.0.1:8890/main.dart.js:37820:38)
+    at aHD.Gi (http://127.0.0.1:8890/main.dart.js:81532:8)
+    at http://127.0.0.1:8890/main.dart.js:82036:11
+    at aTo.a (http://127.0.0.1:8890/main.dart.js:5283:63)
+    at aTo.$2 (http://127.0.0.1:8890/main.dart.js:46112:14)
+    at Object.O (http://127.0.0.1:8890/main.dart.js:5269:10)
+    at iO.anp (http://127.0.0.1:8890/main.dart.js:82046:10) @ http://127.0.0.1:8890/main.dart.js:34280
+[   49127ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/api/v1/enrollments/current:0
+[  106078ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/api/v1/requests/7bbc1fcc-a3d5-4818-8748-e287bafb39c2/confirm:0

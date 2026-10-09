@@ -1,0 +1,22 @@
+- generic [active] [ref=e5]:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic [ref=e35]: Jarvis
+            - generic [ref=e36]: Office procurement
+            - button "Assistant Tab 1 of 2" [ref=e37]
+            - button "Orders Tab 2 of 2" [ref=e38]
+            - button "Account MT Maya Tan manager" [ref=e39]
+          - generic:
+            - generic:
+              - group:
+                - generic [ref=e78]: Orders
+                - generic [ref=e79]: History, spend against budget and audit trail.
+                - generic [ref=e80]: "Updates appear automatically. Status: Live"
+                - button "Refresh" [ref=e81]
+                - generic [ref=e82]: SPEND THIS MONTH — Loading…
+                - generic [ref=e83]: SAVINGS … Comparing quotes…
+                - generic [ref=e84]: AUTO-APPROVED — Orders within policy
+                - generic [ref=e85]: ORDERS —

@@ -1,0 +1,409 @@
+# Approved items catalog (seed). Every preferred vendor is an allow-listed merchant that returned
+# a matching, available product in the Reap SG sandbox probe on 2026-10-09 (prices in SGD seen then).
+#
+# Fields:
+#   sku                 stable slug, unique; used as the natural key by the seed loader (upsert).
+#   name, aliases       used for catalog matching (exact sku -> name/alias fuzzy -> off-list).
+#   category            Paper & Stationery | Coffee & Tea | Pantry & Snacks | Cleaning & Hygiene | Electronics & Office
+#   unit                human description of one purchasable unit (what qty counts).
+#   default_qty         used when the requester says "the usual" / no quantity.
+#   max_unit_price_sgd  policy ceiling per unit, decimal SGD; loader converts to integer cents (round half up).
+#   preferred_vendors   vendor domains in preference order (see vendors.yaml).
+#   auto_approve        false => always NEEDS_APPROVAL even when within limits.
+#   search_query        query sent to Reap /agentic/products/search with merchantPreference {ONLY, domain}.
+#   probe_seen          example product + price observed during the probe (documentation only).
+items:
+  # ---------- Paper & Stationery ----------
+  - sku: a4-copier-paper-ream
+    name: A4 Copier Paper 80gsm (500 sheets)
+    aliases: [printer paper, copy paper, a4 paper, paper ream, ream of paper, photocopy paper]
+    category: Paper & Stationery
+    unit: ream (500 sheets)
+    default_qty: 10
+    max_unit_price_sgd: 9.00
+    preferred_vendors: [popular.com.sg, kinokuniya.com.sg]
+    auto_approve: true
+    search_query: A4 copier paper 80g 500 sheets
+    probe_seen: "IK Signature Copier Paper 80g A4 500's @ 7.10; PaperOne 80g A4 500 @ 7.90"
+  - sku: a4-copier-paper-carton
+    name: A4 Copier Paper 80gsm (carton of 5 reams)
+    aliases: [paper carton, box of paper, carton of paper]
+    category: Paper & Stationery
+    unit: carton (5 reams)
+    default_qty: 2
+    max_unit_price_sgd: 40.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: copier paper 80g A4 500's 1 carton
+    probe_seen: "IK Signature Copier Paper 80g A4 500's (1 Carton) @ 35.50"
+  - sku: ballpoint-pen
+    name: Ballpoint Pen 0.7mm
+    aliases: [pens, ballpoint pens, biro, blue pens]
+    category: Paper & Stationery
+    unit: pen
+    default_qty: 20
+    max_unit_price_sgd: 2.50
+    preferred_vendors: [popular.com.sg, kinokuniya.com.sg]
+    auto_approve: true
+    search_query: ballpoint pen 0.7mm
+    probe_seen: "PILOT Rexgrip Ballpoint Pen 0.7mm @ 1.55"
+  - sku: sticky-notes
+    name: Post-it Super Sticky Notes 3x3 (5 pads)
+    aliases: [post-its, post it notes, sticky notes, stickies]
+    category: Paper & Stationery
+    unit: pack of 5 pads
+    default_qty: 5
+    max_unit_price_sgd: 15.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: Post-it super sticky notes
+    probe_seen: "Post-it 654-5SS Super Sticky Notes @ 12.00"
+  - sku: highlighter-set
+    name: Highlighter Set (4 colours)
+    aliases: [highlighters, highlighter pens, markers for highlighting]
+    category: Paper & Stationery
+    unit: set of 4
+    default_qty: 5
+    max_unit_price_sgd: 10.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: STABILO highlighter set of 4
+    probe_seen: "STABILO Swing Cool Highlighter Set of 4 @ 8.00"
+  - sku: stapler
+    name: Stapler No. 10
+    aliases: [staplers, desk stapler]
+    category: Paper & Stationery
+    unit: stapler
+    default_qty: 2
+    max_unit_price_sgd: 12.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: MAX HD-10 stapler
+    probe_seen: "MAX Stapler HD-10NX @ 7.90"
+  - sku: staples-no10
+    name: Staples No. 10 (box)
+    aliases: [staples, staple refills, staple box]
+    category: Paper & Stationery
+    unit: box
+    default_qty: 10
+    max_unit_price_sgd: 2.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: MAX staples 10-1M
+    probe_seen: "MAX STAPLES 10-1M @ 0.65"
+  - sku: whiteboard-marker
+    name: Whiteboard Marker
+    aliases: [whiteboard markers, dry erase markers, board markers]
+    category: Paper & Stationery
+    unit: marker
+    default_qty: 12
+    max_unit_price_sgd: 3.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: whiteboard marker
+    probe_seen: "Pilot V Board Master Whiteboard Marker @ 1.75"
+  - sku: ring-file-a4
+    name: A4 2D Ring File
+    aliases: [ring binder, binders, ring files, file folders]
+    category: Paper & Stationery
+    unit: file
+    default_qty: 10
+    max_unit_price_sgd: 6.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: A4 2D ring file
+    probe_seen: "POP Bazic A4 2D Ring File 25MM @ 4.90"
+  - sku: document-envelope-a4
+    name: A4 Document Envelope
+    aliases: [envelopes, a4 envelopes, document envelopes, data envelope]
+    category: Paper & Stationery
+    unit: envelope
+    default_qty: 20
+    max_unit_price_sgd: 3.00
+    preferred_vendors: [popular.com.sg, kinokuniya.com.sg]
+    auto_approve: true
+    search_query: A4 data envelope
+    probe_seen: "Centre Document Bag Data Envelope A4 @ 1.10"
+  - sku: correction-tape
+    name: Correction Tape
+    aliases: [white out, tipp-ex, correction tapes]
+    category: Paper & Stationery
+    unit: tape
+    default_qty: 5
+    max_unit_price_sgd: 5.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: PENTEL correction tape
+    probe_seen: "PENTEL Retractable Correction Tape ZTT605 @ 2.00"
+  - sku: notebook-a4
+    name: A4 Campus Notebook
+    aliases: [notebooks, notepads, exercise books, a4 notebook]
+    category: Paper & Stationery
+    unit: notebook
+    default_qty: 10
+    max_unit_price_sgd: 9.00
+    preferred_vendors: [kinokuniya.com.sg, popular.com.sg]
+    auto_approve: true
+    search_query: KOKUYO A4 campus notebook
+    probe_seen: "KOKUYO A4 Campus Notebook Grid 5mm 40 Sheets @ 7.75"
+  - sku: battery-aa-4
+    name: AA Alkaline Batteries (4-pack)
+    aliases: [aa batteries, double a batteries, batteries]
+    category: Paper & Stationery
+    unit: pack of 4
+    default_qty: 5
+    max_unit_price_sgd: 12.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: Energizer Max AA 4pcs
+    probe_seen: "Energizer Max Battery AA 4pcs E91BP4M @ 9.90"
+  - sku: battery-aaa-4
+    name: AAA Alkaline Batteries (4-pack)
+    aliases: [aaa batteries, triple a batteries]
+    category: Paper & Stationery
+    unit: pack of 4
+    default_qty: 5
+    max_unit_price_sgd: 12.00
+    preferred_vendors: [popular.com.sg]
+    auto_approve: true
+    search_query: Energizer Max AAA 4pcs
+    probe_seen: "Energizer Max Battery AAA 4pcs E92BP4M @ 9.90"
+
+  # ---------- Coffee & Tea ----------
+  - sku: coffee-beans-espresso-250g
+    name: Espresso Coffee Beans 250g
+    aliases: [coffee, coffee beans, espresso beans, beans, whole beans]
+    category: Coffee & Tea
+    unit: 250g bag
+    default_qty: 4
+    max_unit_price_sgd: 25.00
+    preferred_vendors: [commonmancoffeeroasters.com, alchemist.com.sg, dutchcolony.sg, bettrcoffee.com]
+    auto_approve: true
+    search_query: espresso blend coffee beans
+    probe_seen: "Common Man 22 Martin Blend 250g @ 20.50; Alchemist Dark Matter 200g @ 18.00"
+  - sku: coffee-capsules
+    name: Coffee Capsules (Nespresso compatible, 10 pcs)
+    aliases: [coffee pods, pods, capsules, nespresso pods, coffee capsules]
+    category: Coffee & Tea
+    unit: box of 10 capsules
+    default_qty: 6
+    max_unit_price_sgd: 16.00
+    preferred_vendors: [commonmancoffeeroasters.com]
+    auto_approve: true
+    search_query: coffee capsules
+    probe_seen: "Common Man Daily Driver Capsules @ 13.50"
+  - sku: drip-coffee-bags
+    name: Drip Coffee Bags (box)
+    aliases: [drip bags, drip coffee, pour over bags, coffee drip bags]
+    category: Coffee & Tea
+    unit: box
+    default_qty: 4
+    max_unit_price_sgd: 35.00
+    preferred_vendors: [commonmancoffeeroasters.com, pppcoffee.com]
+    auto_approve: true
+    search_query: drip bags
+    probe_seen: "Common Man Drip Bags El Diviso (6 pcs) @ 21.00; PPP Supernova Drip Bags from 30.00"
+  - sku: tea-earl-grey
+    name: Earl Grey Tea (tin)
+    aliases: [tea, tea bags, earl grey, black tea]
+    category: Coffee & Tea
+    unit: tin
+    default_qty: 4
+    max_unit_price_sgd: 15.00
+    preferred_vendors: [gryphontea.com, prycetea.com]
+    auto_approve: true
+    search_query: earl grey tea
+    probe_seen: "Gryphon Earl Grey Lavender @ 12.91"
+  - sku: tea-green-genmaicha
+    name: Green Tea Genmaicha
+    aliases: [green tea, genmaicha, japanese tea]
+    category: Coffee & Tea
+    unit: pack
+    default_qty: 3
+    max_unit_price_sgd: 18.00
+    preferred_vendors: [gryphontea.com]
+    auto_approve: true
+    search_query: genmaicha green tea
+    probe_seen: "Gryphon Genmaicha 9.16-15.26"
+
+  # ---------- Pantry & Snacks ----------
+  - sku: mixed-nuts-1kg
+    name: Fancy Mixed Nuts 1kg
+    aliases: [nuts, mixed nuts, cashews, trail mix]
+    category: Pantry & Snacks
+    unit: 1kg pack
+    default_qty: 2
+    max_unit_price_sgd: 30.00
+    preferred_vendors: [camelnuts.com]
+    auto_approve: true
+    search_query: fancy mixed nuts 1kg
+    probe_seen: "Camel Nuts Fancy Mixed Nuts 1kg @ 27.00"
+  - sku: snack-variety-box
+    name: Healthy Snack Variety Box
+    aliases: [snacks, snack box, healthy snacks, pantry snacks]
+    category: Pantry & Snacks
+    unit: box
+    default_qty: 2
+    max_unit_price_sgd: 32.00
+    preferred_vendors: [boxgreen.co]
+    auto_approve: true
+    search_query: healthylicious variety box
+    probe_seen: "Boxgreen Healthylicious Variety Box @ 28.00"
+  - sku: salted-egg-chips-95g
+    name: Salted Egg Potato Chips 95g
+    aliases: [chips, salted egg chips, crisps, irvins]
+    category: Pantry & Snacks
+    unit: 95g bag
+    default_qty: 6
+    max_unit_price_sgd: 11.00
+    preferred_vendors: [irvinsaltedegg.com]
+    auto_approve: true
+    search_query: IRVINS salted egg potato chips 95g
+    probe_seen: "IRVINS Salted Egg Potato Chips (95g) @ 9.50"
+  - sku: cookies-box-6
+    name: Mixed Cookies (box of 6)
+    aliases: [cookies, biscuits, cookie box]
+    category: Pantry & Snacks
+    unit: box of 6
+    default_qty: 2
+    max_unit_price_sgd: 28.00
+    preferred_vendors: [plainvanilla.com.sg]
+    auto_approve: true
+    search_query: box of 6 mixed cookies
+    probe_seen: "Plain Vanilla Box of 6 Mixed Cookies @ 25.51"
+
+  # ---------- Cleaning & Hygiene ----------
+  - sku: hand-sanitizer
+    name: Hand Sanitizer
+    aliases: [sanitiser, sanitizer, hand gel, alcohol gel]
+    category: Cleaning & Hygiene
+    unit: bottle
+    default_qty: 10
+    max_unit_price_sgd: 5.00
+    preferred_vendors: [intertech-hardware.com, pupsik.sg]
+    auto_approve: true
+    search_query: hand sanitizer
+    probe_seen: "TSB Hand Sanitizer Original @ 3.30"
+  - sku: multi-purpose-cleaner
+    name: Multi Purpose Cleaner 500ml
+    aliases: [cleaning spray, surface cleaner, all purpose cleaner, cleaner]
+    category: Cleaning & Hygiene
+    unit: 500ml bottle
+    default_qty: 4
+    max_unit_price_sgd: 8.00
+    preferred_vendors: [intertech-hardware.com]
+    auto_approve: true
+    search_query: Selleys multi purpose cleaner
+    probe_seen: "Selleys Multi Purpose Cleaner 500ml @ 5.15"
+  - sku: garbage-bags
+    name: Garbage Bags (roll)
+    aliases: [trash bags, bin bags, rubbish bags, bin liners]
+    category: Cleaning & Hygiene
+    unit: roll / pack
+    default_qty: 10
+    max_unit_price_sgd: 10.00
+    preferred_vendors: [intertech-hardware.com, shoppy.sg]
+    auto_approve: true
+    search_query: garbage bag
+    probe_seen: "Intertech Garbage bag @ 7.50; Shoppy Trash Bin Bag Rolls 5.90-8.90"
+  - sku: hand-wash-500ml
+    name: Hand Wash 500ml
+    aliases: [hand soap, liquid soap, hand wash, soap]
+    category: Cleaning & Hygiene
+    unit: 500ml bottle
+    default_qty: 4
+    max_unit_price_sgd: 15.00
+    preferred_vendors: [metro.com.sg, spectrumstore.sg]
+    auto_approve: true
+    search_query: hand wash 500ml
+    probe_seen: "Nudy Rudy Sea Salt Suds Hand Wash 500ml @ 11.86"
+  - sku: microfiber-cloths
+    name: Microfiber Cleaning Cloths (pack)
+    aliases: [cleaning cloths, microfibre cloths, rags, dusters]
+    category: Cleaning & Hygiene
+    unit: pack
+    default_qty: 3
+    max_unit_price_sgd: 12.00
+    preferred_vendors: [shoppy.sg, intertech-hardware.com]
+    auto_approve: true
+    search_query: microfiber cleaning cloth
+    probe_seen: "Shoppy Microfiber Kitchen Cloth (6 Pieces) 9.90-18.90"
+
+  # ---------- Electronics & Office ----------
+  - sku: usb-c-cable-100w
+    name: USB-C to USB-C Cable 100W
+    aliases: [usb c cable, charging cable, type c cable, usb-c cable]
+    category: Electronics & Office
+    unit: cable
+    default_qty: 5
+    max_unit_price_sgd: 20.00
+    preferred_vendors: [ugreen.com.sg, anker.com.sg]
+    auto_approve: true
+    search_query: USB C to USB C cable 100W
+    probe_seen: "UGREEN 70427 100W USB C to USB C Cable 8.99-15.99"
+  - sku: hdmi-cable
+    name: HDMI Cable 4K
+    aliases: [hdmi, hdmi cable, display cable]
+    category: Electronics & Office
+    unit: cable
+    default_qty: 3
+    max_unit_price_sgd: 25.00
+    preferred_vendors: [ugreen.com.sg]
+    auto_approve: true
+    search_query: HDMI cable 4K
+    probe_seen: "UGREEN 25910 HDMI 2.1 Cable 15.99-21.99"
+  - sku: usb-c-hub
+    name: USB-C Hub (multiport)
+    aliases: [dongle, usb hub, docking station, usb c adapter]
+    category: Electronics & Office
+    unit: hub
+    default_qty: 2
+    max_unit_price_sgd: 65.00
+    preferred_vendors: [ugreen.com.sg]
+    auto_approve: false
+    search_query: USB C hub
+    probe_seen: "UGREEN 45000 USB C Hub @ 39.99"
+  - sku: usb-c-charger-65w
+    name: USB-C Charger 65W
+    aliases: [laptop charger, charger, power adapter, gan charger]
+    category: Electronics & Office
+    unit: charger
+    default_qty: 2
+    max_unit_price_sgd: 70.00
+    preferred_vendors: [anker.com.sg]
+    auto_approve: false
+    search_query: Anker 65W USB C charger
+    probe_seen: "Anker Charger 735 Powerport 65W @ 38.90 (merchant.name '---')"
+  - sku: monitor-arm
+    name: Monitor Arm
+    aliases: [monitor mount, screen arm, monitor stand]
+    category: Electronics & Office
+    unit: arm
+    default_qty: 1
+    max_unit_price_sgd: 140.00
+    preferred_vendors: [ergotune.com]
+    auto_approve: false
+    search_query: monitor arm
+    probe_seen: "ErgoTune Float Monitor Arm 79-139"
+  - sku: monitor-24in
+    name: 24-inch Monitor
+    aliases: [monitor, screen, display, 24 inch monitor]
+    category: Electronics & Office
+    unit: monitor
+    default_qty: 1
+    max_unit_price_sgd: 180.00
+    preferred_vendors: [prismplus.sg]
+    auto_approve: false
+    search_query: PRISM+ X240 monitor
+    probe_seen: "PRISM+ X240 149-179"
+  - sku: ergonomic-chair
+    name: Ergonomic Office Chair
+    aliases: [office chair, desk chair, chair, ergonomic chair]
+    category: Electronics & Office
+    unit: chair
+    default_qty: 1
+    max_unit_price_sgd: 600.00
+    preferred_vendors: [ergotune.com]
+    auto_approve: false
+    search_query: ErgoTune ergonomic chair
+    probe_seen: "ErgoTune Joobie Lite @ 369; ErgoTune Supreme 549-599"

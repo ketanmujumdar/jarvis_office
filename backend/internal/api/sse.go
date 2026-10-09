@@ -29,12 +29,13 @@ func (s *Server) sse(w http.ResponseWriter, r *http.Request) {
 
 	h := w.Header()
 	h.Set("Content-Type", "text/event-stream")
-	h.Set("Cache-Control", "no-cache")
+	h.Set("Cache-Control", "no-cache, no-transform")
+	h.Set("Content-Encoding", "identity")
 	h.Set("Connection", "keep-alive")
 	h.Set("X-Accel-Buffering", "no")
 	w.WriteHeader(http.StatusOK)
 	// Tell EventSource to retry after 3 s and flush headers so the client sees the stream open.
-	if _, err := fmt.Fprint(w, "retry: 3000\n: connected\n\n"); err != nil {
+	if _, err := fmt.Fprint(w, "retry: 3000\n: connected\n: "+strings.Repeat(" ", 2048)+"\n\n"); err != nil {
 		return
 	}
 	if err := rc.Flush(); err != nil {

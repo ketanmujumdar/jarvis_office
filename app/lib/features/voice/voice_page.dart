@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../core/router.dart';
 import '../../core/theme/tokens.dart';
 import '../../core/widgets/widgets.dart';
+import '../../core/api/models.dart';
+import '../request/request_controller.dart';
 import '../request/widgets/request_workspace.dart';
 import 'voice_controller.dart';
 import 'widgets/mic_orb.dart';
@@ -50,6 +52,7 @@ class VoicePage extends ConsumerWidget {
             maxWidth: 1400,
             header: header,
             children: [
+              _PaymentBanner(requestId: state.activeRequestId),
               const SizedBox(height: 600, child: conversation),
               const SizedBox(height: AppSpace.lg),
               workspace,
@@ -70,6 +73,7 @@ class VoicePage extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   header,
+                  _PaymentBanner(requestId: state.activeRequestId),
                   const SizedBox(height: AppSpace.xl),
                   Expanded(
                     child: Row(
@@ -403,6 +407,64 @@ class _WorkspaceColumn extends ConsumerWidget {
       requestId: id,
       allowTwoColumns: false,
       header: header,
+    );
+  }
+}
+
+/// A big, always-visible "Approve payment" button whenever the active request
+/// has a Reap payment waiting for the user. Browsers block pages from opening
+/// tabs on their own, so the user has to tap it.
+class _PaymentBanner extends ConsumerWidget {
+  const _PaymentBanner({required this.requestId});
+  final String? requestId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final id = requestId;
+    if (id == null) return const SizedBox.shrink();
+    final detail = ref.watch(requestDetailProvider(id)).value;
+    final pending = (detail?.payments ?? const <Payment>[])
+        .where(
+          (p) =>
+              p.status == PaymentStatus.requiresAction &&
+              p.approvalUrl.isNotEmpty,
+        )
+        .toList();
+    if (pending.isEmpty) return const SizedBox.shrink();
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpace.lg),
+      child: Container(
+        padding: const EdgeInsets.all(AppSpace.lg),
+        decoration: BoxDecoration(
+          color: scheme.primaryContainer,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Wrap(
+          spacing: AppSpace.md,
+          runSpacing: AppSpace.md,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          children: [
+            Icon(Icons.lock_outline, color: scheme.onPrimaryContainer),
+            Text(
+              'Payment waiting for your approval',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: scheme.onPrimaryContainer,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            for (final p in pending)
+              FilledButton.icon(
+                key: ValueKey('approve-payment-${p.id}'),
+                onPressed: () => ref.read(urlOpenerProvider)(p.approvalUrl),
+                icon: const Icon(Icons.open_in_new, size: 18),
+                label: Text(
+                  'Approve S\$${((p.finalCents ?? p.quotedCents) / 100).toStringAsFixed(2)} · ${p.merchantName}',
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -144,6 +144,7 @@ type Server struct {
 	faults      []*Fault
 	requests    []RecordedRequest
 	orderSeq    int
+	maxQty      map[string]int // variant id -> max quantity a quote may ask for (0 = unlimited)
 }
 
 type variantRef struct {
@@ -328,6 +329,26 @@ func (s *Server) SetVariantPrice(variantID string, cents int64) error {
 		return fmt.Errorf("fakereap: unknown variant %q", variantID)
 	}
 	ref.p.Variants[ref.i].PriceCents = cents
+	return nil
+}
+
+// SetVariantMaxQuantity limits how many units of a variant one quote may ask for (the merchant's
+// stock). A quote asking for more is rejected exactly like the real sandbox does:
+// 400 AGENTIC_REQUEST_REJECTED with detail {"errors":[{"field":"items"}]}. max <= 0 removes the limit.
+func (s *Server) SetVariantMaxQuantity(variantID string, max int) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if _, ok := s.variantByID[variantID]; !ok {
+		return fmt.Errorf("fakereap: unknown variant %q", variantID)
+	}
+	if s.maxQty == nil {
+		s.maxQty = map[string]int{}
+	}
+	if max <= 0 {
+		delete(s.maxQty, variantID)
+	} else {
+		s.maxQty[variantID] = max
+	}
 	return nil
 }
 
@@ -944,6 +965,11 @@ func (s *Server) handleCreateQuote(w http.ResponseWriter, r *http.Request, body 
 		}
 		if it.Quantity < 1 {
 			writeErr(w, http.StatusBadRequest, reap.CodeRequestRejected, "quantity must be at least 1", nil)
+			return
+		}
+		if max := s.maxQty[it.VariantID]; max > 0 && it.Quantity > max {
+			writeErr(w, http.StatusBadRequest, reap.CodeRequestRejected, "The request was rejected",
+				map[string]any{"errors": []any{map[string]any{"field": "items"}}})
 			return
 		}
 		if q.Domain == "" {

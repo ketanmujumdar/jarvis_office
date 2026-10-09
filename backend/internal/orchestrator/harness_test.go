@@ -58,6 +58,16 @@ type envConfig struct {
 	store          func(t *testing.T) store.Store
 	matcher        OfferMatcher
 	reapOpts       func(*fakereap.Options)
+	probeTimeout   time.Duration // 0: pre-confirm quote check off (most tests count Reap quotes)
+	wrapReap       func(reap.Client) reap.Client
+}
+
+// withPreflight turns on the pre-confirm quote check with the given timeout.
+func withPreflight(timeout time.Duration) envOpt { return func(c *envConfig) { c.probeTimeout = timeout } }
+
+// withReapWrapper wraps the Reap client the orchestrator uses (not the search adapter).
+func withReapWrapper(f func(reap.Client) reap.Client) envOpt {
+	return func(c *envConfig) { c.wrapReap = f }
 }
 
 func withReapOptions(f func(*fakereap.Options)) envOpt { return func(c *envConfig) { c.reapOpts = f } }
@@ -106,8 +116,16 @@ func newEnv(t *testing.T, opts ...envOpt) *testEnv {
 	if parser == nil {
 		parser = agents.NewLLMParser(fakellm.New())
 	}
+	probe := cfg.probeTimeout
+	if probe == 0 {
+		probe = -1
+	}
+	var oc reap.Client = rc
+	if cfg.wrapReap != nil {
+		oc = cfg.wrapReap(rc)
+	}
 	o := New(Deps{
-		Store: st, Queue: q, Bus: bus, Audit: audit.New(st), Approvals: appr, Reap: rc,
+		Store: st, Queue: q, Bus: bus, Audit: audit.New(st), Approvals: appr, Reap: oc, QuoteProbeTimeout: probe,
 		Parser: parser, Adapter: adapter, Clock: time.Now,
 		SearchDeadline: cfg.searchDeadline, ResultsPerVendor: 5,
 		CheckoutPollInterval: time.Hour, CheckoutPollTimeout: time.Minute,

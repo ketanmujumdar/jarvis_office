@@ -44,6 +44,7 @@ type Config struct {
 
 	// Orchestration
 	SearchDeadline         time.Duration // SEARCH_DEADLINE, default 20s (per request fan-out)
+	QuoteProbeTimeout      time.Duration // QUOTE_PROBE_TIMEOUT: pre-confirm stock check; 0 = default 6s, negative = off
 	SearchResultsPerVendor int           // SEARCH_RESULTS_PER_VENDOR, default 5
 	CheckoutPollInterval   time.Duration // CHECKOUT_POLL_INTERVAL, default 3s
 	CheckoutPollTimeout    time.Duration // CHECKOUT_POLL_TIMEOUT, default 30m
@@ -85,6 +86,7 @@ func Load(dotenvPath string) (Config, error) {
 		ReapWebhookSecret:      os.Getenv("REAP_WEBHOOK_SECRET"),
 		ReapTimeout:            envDuration("REAP_TIMEOUT", 30*time.Second),
 		SearchDeadline:         envDuration("SEARCH_DEADLINE", 20*time.Second),
+		QuoteProbeTimeout:      envDuration("QUOTE_PROBE_TIMEOUT", 0),
 		SearchResultsPerVendor: envInt("SEARCH_RESULTS_PER_VENDOR", 5),
 		CheckoutPollInterval:   envDuration("CHECKOUT_POLL_INTERVAL", 3*time.Second),
 		CheckoutPollTimeout:    envDuration("CHECKOUT_POLL_TIMEOUT", 30*time.Minute),

@@ -26,6 +26,7 @@ type merchantGroup struct {
 	merchantName string
 	items        []reap.QuoteItem
 	itemsCents   domain.Cents
+	lines        []groupLine
 }
 
 // handleCheckout: approved -> checking_out -> per merchant Reap quote -> drift + limit checks ->
@@ -82,7 +83,10 @@ func retryableReap(err error) bool {
 }
 
 func checkoutFailure(err error) string {
+	var iu *itemsUnavailableError
 	switch {
+	case errors.As(err, &iu):
+		return iu.msg
 	case errors.Is(err, domain.ErrNoActiveEnrollment):
 		return "no active card enrollment: add a card and try again"
 	case reap.IsCode(err, reap.CodeEnrollmentNotActive), reap.IsCode(err, reap.CodeEnrollmentNotFound):
@@ -109,16 +113,26 @@ func quoteStale(err error) bool {
 }
 
 func (o *Impl) checkout(ctx context.Context, job queue.Job, requestID string) error {
-	for round := 0; ; round++ {
-		err := o.checkoutRound(ctx, requestID)
-		if errors.Is(err, errQuoteStale) && round < 2 {
+	run := newCheckoutRun()
+	stale, changes := 0, 0
+	for {
+		err := o.checkoutRound(ctx, requestID, run)
+		if errors.Is(err, errQuoteStale) && stale < 2 {
+			stale++
 			continue
+		}
+		if errors.Is(err, errBasketChanged) {
+			if changes < maxBasketChanges {
+				changes++
+				continue
+			}
+			return queue.Permanent(&itemsUnavailableError{msg: "The vendors kept rejecting items in this order, so it was stopped. Try a smaller quantity or other items."})
 		}
 		return err
 	}
 }
 
-func (o *Impl) checkoutRound(ctx context.Context, requestID string) error {
+func (o *Impl) checkoutRound(ctx context.Context, requestID string, run *checkoutRun) error {
 	d, err := o.d.Store.Requests().Detail(ctx, requestID)
 	if err != nil {
 		return err
@@ -156,9 +170,18 @@ func (o *Impl) checkoutRound(ctx context.Context, requestID string) error {
 	payments := make([]domain.Payment, 0, len(groups))
 	var live, shipping domain.Cents
 	for _, g := range groups {
+		reused := quoteReused(d.Payments, g.key)
 		p, err := o.quoteGroup(ctx, d, g, enr, *addr)
 		if err != nil {
+			if reap.IsItemRejection(err) && !retryableReap(err) {
+				// One or more lines cannot be supplied by this merchant: isolate them and fall
+				// back to another merchant (or fail with a readable reason).
+				return o.handleItemRejection(ctx, run, r.ID, g, *addr, err)
+			}
 			return err
+		}
+		if !reused {
+			run.unchecked[p.ID] = true
 		}
 		payments = append(payments, p)
 		live += p.QuotedCents
@@ -204,6 +227,7 @@ func (o *Impl) checkoutRound(ctx context.Context, requestID string) error {
 
 	// 4. Create checkouts (Reap-hosted approval page per merchant).
 	for i := range payments {
+		delete(run.unchecked, payments[i].ID) // a checkout may exist from here on
 		if err := o.createCheckout(ctx, &payments[i], enr); err != nil {
 			if quoteStale(err) {
 				o.markQuoteStale(ctx, &payments[i])
@@ -434,6 +458,7 @@ func basketGroups(d domain.RequestDetail) []merchantGroup {
 			g.items = append(g.items, reap.QuoteItem{VariantID: of.ReapVariantID, Quantity: qty})
 		}
 		g.itemsCents += of.UnitPriceCents.MulQty(qty)
+		g.lines = append(g.lines, groupLine{line: li, offer: of, qty: qty})
 	}
 	sort.Strings(keys)
 	out := make([]merchantGroup, 0, len(keys))

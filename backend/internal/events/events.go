@@ -29,12 +29,16 @@ const (
 	CheckoutQuoted       Type = "checkout.quoted"         // {request_id, payment}
 	CheckoutPriceDrift   Type = "checkout.price_drift"    // {request_id, approved_cents, live_cents, pct}
 	PaymentActionNeeded  Type = "payment.action_required" // {request_id, payment, approval_url}
-	PaymentStatusChanged Type = "payment.status_changed"  // {request_id, payment}
-	OrderCompleted       Type = "order.completed"         // {request_id, payments}
-	PaymentAlert         Type = "payment.alert"           // {request_id, payment, kind, message}
-	EnrollmentUpdated    Type = "enrollment.updated"      // {enrollment}
-	AgentMessage         Type = "agent.message"           // {session_id, role, content}
-	Heartbeat            Type = "heartbeat"               // {} every 15s (sent by the SSE handler)
+	// CheckoutItemRejected: a merchant rejected one line at quote time (e.g. not enough stock).
+	CheckoutItemRejected Type = "checkout.item_rejected" // {request_id, line_item_id, merchant, quantity, title, message}
+	// CheckoutOfferReplaced: a rejected line moved to the next-ranked offer at another merchant.
+	CheckoutOfferReplaced Type = "checkout.offer_replaced" // {request_id, line_item_id, from_offer, to_offer}
+	PaymentStatusChanged  Type = "payment.status_changed"  // {request_id, payment}
+	OrderCompleted        Type = "order.completed"         // {request_id, payments}
+	PaymentAlert          Type = "payment.alert"           // {request_id, payment, kind, message}
+	EnrollmentUpdated     Type = "enrollment.updated"      // {enrollment}
+	AgentMessage          Type = "agent.message"           // {session_id, role, content}
+	Heartbeat             Type = "heartbeat"               // {} every 15s (sent by the SSE handler)
 )
 
 // Event is one published event. ID is monotonically increasing per process (SSE `id:`).

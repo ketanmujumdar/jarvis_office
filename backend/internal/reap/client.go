@@ -509,3 +509,50 @@ func IsReason(err error, reason string) bool {
 	var ae *APIError
 	return errors.As(err, &ae) && ae.Reason() == reason
 }
+
+// FieldErrors returns the field names of detail.errors[] (e.g. "items" in
+// {"errors":[{"field":"items"}]}, sent with AGENTIC_REQUEST_REJECTED), or nil.
+func (e *APIError) FieldErrors() []string {
+	m, ok := e.Detail.(map[string]any)
+	if !ok {
+		return nil
+	}
+	list, ok := m["errors"].([]any)
+	if !ok {
+		return nil
+	}
+	var out []string
+	for _, it := range list {
+		if fe, ok := it.(map[string]any); ok {
+			if f, ok := fe["field"].(string); ok && f != "" {
+				out = append(out, f)
+			}
+		}
+	}
+	return out
+}
+
+// IsItemRejection reports whether a create-quote error says the merchant cannot supply one or more
+// of the requested items (as opposed to a problem with the address, the key or the whole request):
+// VARIANT_UNAVAILABLE, any other 409 conflict except the quote-lifecycle codes, or
+// AGENTIC_REQUEST_REJECTED whose detail.errors names the "items" field. The sandbox answers a
+// quantity above the merchant's stock with 409 or 400 AGENTIC_REQUEST_REJECTED {field: items}.
+func IsItemRejection(err error) bool {
+	var ae *APIError
+	if !errors.As(err, &ae) {
+		return false
+	}
+	switch ae.Code {
+	case CodeVariantUnavailable:
+		return true
+	case CodeQuoteExpired, CodeQuoteReplacement, CodeQuoteNotFound, CodeQuoteNotMutable:
+		return false
+	case CodeRequestRejected:
+		for _, f := range ae.FieldErrors() {
+			if f == "items" || strings.HasPrefix(f, "items[") || strings.HasPrefix(f, "items.") {
+				return true
+			}
+		}
+	}
+	return ae.HTTPStatus == http.StatusConflict
+}

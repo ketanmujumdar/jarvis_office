@@ -102,6 +102,9 @@ type Deps struct {
 	// AllowedMerchants is the merchant allow-list (default: allowlist.Default(), i.e.
 	// backend/seed/allowed_merchants.tsv). Vendors off it are never searched, approved or paid.
 	AllowedMerchants *allowlist.Set
+	// QuoteProbeTimeout bounds the pre-confirm Reap quote check run before a request is quoted
+	// (default 6s; negative disables it).
+	QuoteProbeTimeout time.Duration
 }
 
 // Impl implements Service.
@@ -124,6 +127,9 @@ var _ Service = (*Impl)(nil)
 func New(d Deps) *Impl {
 	if d.Clock == nil {
 		d.Clock = time.Now
+	}
+	if d.QuoteProbeTimeout == 0 {
+		d.QuoteProbeTimeout = defaultQuoteProbeTimeout
 	}
 	if d.SearchDeadline <= 0 {
 		d.SearchDeadline = 20 * time.Second

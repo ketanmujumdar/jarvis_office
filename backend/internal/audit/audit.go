@@ -43,6 +43,12 @@ const (
 	// CheckoutLimitExceeded: the live Reap total broke a hard policy limit at checkout time.
 	// payload: {live_cents, reasons}
 	CheckoutLimitExceeded = "checkout.limit_exceeded"
+	// CheckoutItemRejected: a merchant's Reap quote rejected one line (e.g. quantity above its
+	// stock). payload: {line_item_id, offer_id, merchant, merchant_key, variant_id, quantity, title, error, message}
+	CheckoutItemRejected = "checkout.item_rejected"
+	// CheckoutOfferReplaced: a rejected line fell back to the next-ranked offer at another merchant.
+	// payload: {line_item_id, from_offer_id, from_merchant, to_offer_id, to_merchant, quantity}
+	CheckoutOfferReplaced = "checkout.offer_replaced"
 	EnrollmentStarted     = "enrollment.started"
 	EnrollmentStatus      = "enrollment.status"
 	AgentToolCall         = "agent.tool_call" // payload: {session_id, tool, args, ok, latency_ms}

@@ -333,6 +333,12 @@ func (o *Impl) rankAndEvaluate(ctx context.Context, r domain.PurchaseRequest, li
 	if err != nil {
 		return err
 	}
+	// Validate the basket with Reap before the user hears it (may switch or drop lines).
+	if pres, err := o.preflightQuotes(ctx, r.ID); err != nil {
+		return fmt.Errorf("quote preflight: %w", err)
+	} else if pres != nil {
+		res = *pres
+	}
 	for _, a := range all {
 		top := make([]domain.Offer, 0, 3)
 		for _, of := range a.offers {

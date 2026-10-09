@@ -414,4 +414,102 @@ void main() {
     expect(c.read(playgroundProvider).transcript, isEmpty);
     expect(c.read(playgroundProvider).voiceStatus, VoiceStatus.idle);
   });
+
+  group('narration', () {
+    Map<String, dynamic> lastSystemMessage(List<Json> sent) {
+      final m = sent.lastWhere(
+        (e) =>
+            e['type'] == 'conversation.item.create' &&
+            (e['item'] as Map)['role'] == 'system',
+      );
+      return ((m['item'] as Map)['content'] as List).single
+          as Map<String, dynamic>;
+    }
+
+    Future<void> startWithRequest(dynamic c) async {
+      h.api.toolResult = (_, _) => {'request_id': 'r1', 'status': 'parsing'};
+      await c.read(playgroundProvider.notifier).startVoice();
+      h.transport.emit({
+        'type': 'response.function_call_arguments.done',
+        'call_id': 'c0',
+        'name': 'create_order_request',
+        'arguments': '{"utterance":"paper"}',
+      });
+      await flush();
+      await flush();
+      h.transport.emit({'type': 'response.done', 'response': {}});
+      h.transport.emit({'type': 'response.created'});
+      h.transport.emit({'type': 'response.done', 'response': {}});
+    }
+
+    test('a status change is spoken without being asked', () async {
+      final c = h.container();
+      await startWithRequest(c);
+      h.sse.add(
+        sseEvent(1, 'request.status_changed', {
+          'from': 'searching',
+          'to': 'quoted',
+        }),
+      );
+      await flush();
+      expect(lastSystemMessage(h.transport.sent)['text'], contains('"quoted"'));
+      expect(h.transport.sentTypes.last, 'response.create');
+    });
+
+    test(
+      'an update during a tool call is held, then sent with its output',
+      () async {
+        final c = h.container();
+        await startWithRequest(c);
+        final gate = Completer<void>();
+        h.api.toolGate = gate;
+        h.api.toolResult = (_, _) => {
+          'request': {'id': 'r1', 'status': 'checking_out'},
+        };
+        h.transport.emit({
+          'type': 'response.function_call_arguments.done',
+          'call_id': 'c1',
+          'name': 'confirm_order',
+          'arguments': '{"request_id":"r1","address_id":"a1"}',
+        });
+        await flush();
+        h.sse.add(
+          sseEvent(2, 'request.status_changed', {
+            'from': 'checking_out',
+            'to': 'failed',
+            'failure_reason': 'out of stock',
+          }),
+        );
+        await flush();
+        final before = h.transport.sent.length;
+        expect(
+          h.transport.sent.where(
+            (e) => (e['item'] as Map?)?['role'] == 'system',
+          ),
+          isEmpty,
+        );
+        gate.complete();
+        await flush();
+        await flush();
+        expect(h.transport.sent.length, greaterThan(before));
+        expect(
+          lastSystemMessage(h.transport.sent)['text'],
+          contains('out of stock'),
+        );
+      },
+    );
+
+    test('events for other requests are ignored', () async {
+      final c = h.container();
+      await startWithRequest(c);
+      final n = h.transport.sent.length;
+      h.sse.add(
+        sseEvent(3, 'request.status_changed', {
+          'to': 'quoted',
+        }, requestId: 'other'),
+      );
+      await flush();
+      expect(h.transport.sent.length, n);
+    });
+  });
 }

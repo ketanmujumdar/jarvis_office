@@ -300,6 +300,9 @@ type LineSummary struct {
 	UnitPrice string   `json:"unit_price_sgd,omitempty"`
 	BuyQty    int      `json:"buy_qty,omitempty"` // variants to buy (pack-size aware)
 	LineTotal string   `json:"line_total_sgd,omitempty"`
+	// Note says what happened to the line before checkout, e.g. "Switched from Popular Bookstore
+	// (not enough stock for 20) to Books Kinokuniya Singapore." or why it cannot be bought.
+	Note string `json:"note,omitempty"`
 }
 
 // ApprovalSummary is the latest approval.
@@ -334,6 +337,10 @@ func SummarizeRequest(d domain.RequestDetail) RequestSummary {
 	for _, li := range d.LineItems {
 		ls := LineSummary{Item: li.Description, Qty: li.Qty, OnCatalog: li.CatalogItemID != nil, Decision: string(li.PolicyDecision)}
 		for _, rs := range li.Reasons {
+			if rs.Code == domain.ReasonVendorSwitched || rs.Code == domain.ReasonUnavailable {
+				ls.Note = strings.TrimSpace(ls.Note + " " + rs.Message)
+				continue
+			}
 			ls.Reasons = append(ls.Reasons, rs.Message)
 		}
 		if li.SelectedOfferID != nil {
@@ -386,13 +393,13 @@ func nextStep(s domain.RequestStatus) string {
 	case domain.StatusParsing, domain.StatusSearching:
 		return "Still checking prices. Tell the user you will update them when prices are ready; an automatic status update will arrive. Do not keep calling get_request_status."
 	case domain.StatusQuoted:
-		return "Read back the lines and total, say which need approval, ask which delivery address to use, then call confirm_order after the user agrees."
+		return "Read back the lines and total, say which need approval, mention any line note (a vendor switch or an item that cannot be supplied), ask which delivery address to use, then call confirm_order after the user agrees."
 	case domain.StatusPendingApproval:
 		return "Waiting for an approver to decide."
 	case domain.StatusApproved, domain.StatusCheckingOut:
-		return "Approved. Getting live quotes from the vendors."
+		return "Approved. Preparing the payment with the vendors; the Approve payment button appears in a few seconds."
 	case domain.StatusAwaitingPayment:
-		return "The user must open the payment approval page(s) to approve the charge with Reap. The order is not placed yet."
+		return "Ask the user to tap the \"Approve payment\" button on screen to approve the charge with Reap. Never read the link or URL aloud. The order is not placed yet."
 	case domain.StatusPaying:
 		return "Payment is processing. The order is not placed yet."
 	case domain.StatusOrdered:

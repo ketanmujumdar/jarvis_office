@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api/api_client.dart';
 import '../../core/api/models.dart';
 import '../../core/providers.dart';
+import '../request/request_controller.dart';
 import 'realtime/realtime_transport.dart';
 
 /// Who said a transcript line.
@@ -179,6 +180,9 @@ class PlaygroundController extends Notifier<PlaygroundState> {
   bool _needsResponse = false;
   int _seq = 0;
   ProviderSubscription<AsyncValue<SseEvent>>? _narration;
+  final _heldUpdates = <String>[];
+  Timer? _poll;
+  final _lastStatus = <String, String>{};
 
   @override
   PlaygroundState build() {
@@ -214,6 +218,8 @@ class PlaygroundController extends Notifier<PlaygroundState> {
       case 'request.status_changed':
         final to = e.data['to'] as String?;
         if (to == null || !_narratedStatuses.contains(to)) return;
+        if (_lastStatus[id] == to) return;
+        _lastStatus[id] = to;
         final reason = e.data['failure_reason'] as String?;
         update =
             'Request $id is now "$to"'
@@ -229,9 +235,51 @@ class PlaygroundController extends Notifier<PlaygroundState> {
         return;
     }
     _system('Update: $update');
-    // A tool call in flight (e.g. get_request_status waiting on the search)
-    // will return the new state itself, so don't narrate it twice.
-    if (!voiceLive || _pendingTools > 0) return;
+    if (!voiceLive) return;
+    // While a tool call is in flight (e.g. confirm_order) hold the update and
+    // send it with that tool's output, so it is spoken right after, not lost.
+    if (_pendingTools > 0) {
+      _heldUpdates.add(update);
+      return;
+    }
+    _sendUpdate(update);
+    _requestResponse(force: true);
+  }
+
+  Future<void> _pollStatus() async {
+    final id = state.activeRequestId;
+    if (id == null || !ref.mounted) return;
+    try {
+      final d = await _api.getRequest(id);
+      if (!ref.mounted) return;
+      final to = d.request.status.toJson();
+      final seen = _lastStatus[id];
+      if (seen == null) {
+        _lastStatus[id] = to; // baseline, nothing to announce
+        return;
+      }
+      if (seen == to) return;
+      ref.invalidate(requestDetailProvider(id));
+      _onServerEvent(
+        SseEvent(
+          id: 0,
+          type: 'request.status_changed',
+          requestId: id,
+          at: DateTime.now().toUtc(),
+          data: {
+            'from': seen,
+            'to': to,
+            'failure_reason': d.request.failureReason,
+          },
+        ),
+      );
+      _lastStatus[id] = to;
+    } catch (_) {
+      // transient; next tick retries
+    }
+  }
+
+  void _sendUpdate(String update) {
     _transport?.send({
       'type': 'conversation.item.create',
       'item': {
@@ -248,7 +296,6 @@ class PlaygroundController extends Notifier<PlaygroundState> {
         ],
       },
     });
-    _requestResponse(force: true);
   }
 
   JarvisApi get _api => ref.read(apiProvider);
@@ -289,6 +336,9 @@ class PlaygroundController extends Notifier<PlaygroundState> {
 
   void _trackRequest(String? id) {
     if (id == null || id.isEmpty) return;
+    // Poll as well as SSE: some proxies (Cloudflare quick tunnels) buffer
+    // the event stream, so status changes must not depend on it.
+    _poll ??= Timer.periodic(const Duration(seconds: 2), (_) => _pollStatus());
     // Follow live progress once the conversation has a request to narrate.
     _narration ??= ref.listen<AsyncValue<SseEvent>>(eventStreamProvider(null), (
       _,
@@ -313,6 +363,7 @@ class PlaygroundController extends Notifier<PlaygroundState> {
     await _teardown();
     if (!ref.mounted) return;
     _seenCalls.clear();
+    _heldUpdates.clear();
     _pendingTools = 0;
     _responseActive = false;
     _needsResponse = false;
@@ -460,6 +511,8 @@ class PlaygroundController extends Notifier<PlaygroundState> {
   }
 
   Future<void> _teardown() async {
+    _poll?.cancel();
+    _poll = null;
     final sub = _sub;
     final t = _transport;
     _sub = null;
@@ -718,6 +771,10 @@ class PlaygroundController extends Notifier<PlaygroundState> {
       },
     });
     _pendingTools--;
+    if (_pendingTools == 0 && _heldUpdates.isNotEmpty) {
+      _heldUpdates.forEach(_sendUpdate);
+      _heldUpdates.clear();
+    }
     _needsResponse = true;
     _requestResponse();
   }

@@ -290,24 +290,6 @@ func runCheckoutFailedOrExpired(t *testing.T, mk func(t *testing.T) *testEnv) {
 	}
 }
 
-func TestFlow_QuoteErrorFailsRequest(t *testing.T) {
-	e := newEnv(t)
-	r := e.create("", agents.RequestedItem{Description: "printer paper", Qty: ptr(10)})
-	d := e.wantStatus(r.ID, domain.StatusQuoted)
-	best := offerByID(d, d.LineItems[0].SelectedOfferID)
-	if err := e.reapSrv.SetVariantAvailable(best.ReapVariantID, false); err != nil {
-		t.Fatal(err)
-	}
-	if _, err := e.o.Confirm(e.ctx, r.ID, ConfirmInput{UserID: e.manager.ID, AddressID: e.addr.ID}); err != nil {
-		t.Fatal(err)
-	}
-	e.idle()
-	d = e.wantStatus(r.ID, domain.StatusFailed)
-	if d.Request.FailureReason == "" || len(d.Payments) != 1 || d.Payments[0].Status != domain.PaymentFailed {
-		t.Fatalf("request %+v payments %+v", d.Request, d.Payments)
-	}
-}
-
 func TestFlow_Reap503IsRetried(t *testing.T) {
 	e := newEnv(t)
 	r := e.create("", agents.RequestedItem{Description: "printer paper", Qty: ptr(10)})

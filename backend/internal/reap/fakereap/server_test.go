@@ -477,6 +477,27 @@ func TestPriceDriftHook(t *testing.T) {
 	}
 }
 
+func TestVariantMaxQuantity(t *testing.T) {
+	s, c := newFake(t, fakereap.Options{})
+	if err := s.SetVariantMaxQuantity("var_pop_max_hd10nx", 5); err != nil {
+		t.Fatal(err)
+	}
+	quoteFor(t, c, "var_pop_max_hd10nx", 5)
+	_, err := c.CreateQuote(ctx, reap.NewIdempotencyKey(), reap.CreateQuoteRequest{Email: "a@b.sg",
+		Items: []reap.QuoteItem{{VariantID: "var_pop_max_hd10nx", Quantity: 6}}, ShippingAddress: sgAddress()})
+	var ae *reap.APIError
+	if !errors.As(err, &ae) || ae.HTTPStatus != 400 || ae.Code != reap.CodeRequestRejected || !reap.IsItemRejection(err) {
+		t.Fatalf("err = %#v", err)
+	}
+	if err := s.SetVariantMaxQuantity("var_pop_max_hd10nx", 0); err != nil {
+		t.Fatal(err)
+	}
+	quoteFor(t, c, "var_pop_max_hd10nx", 6)
+	if s.SetVariantMaxQuantity("nope", 1) == nil {
+		t.Fatal("unknown variant must error")
+	}
+}
+
 func TestQuoteShippingErrorsAndExpiry(t *testing.T) {
 	s, c := newFake(t, fakereap.Options{QuoteTTL: 10 * time.Minute})
 	q := quoteFor(t, c, "var_pop_max_hd10nx", 1)

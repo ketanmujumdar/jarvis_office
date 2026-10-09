@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -463,6 +464,33 @@ func TestCheckoutStatusTerminal(t *testing.T) {
 	} {
 		if st.Terminal() != want {
 			t.Errorf("%s.Terminal() = %v", st, !want)
+		}
+	}
+}
+
+func TestIsItemRejection(t *testing.T) {
+	sandboxStock := decodeAPIError(400, []byte(`{"error":{"code":"AGENTIC_REQUEST_REJECTED","message":"The request was rejected","detail":{"errors":[{"field":"items"}]}}}`))
+	if got := sandboxStock.FieldErrors(); len(got) != 1 || got[0] != "items" {
+		t.Fatalf("field errors = %v", got)
+	}
+	cases := []struct {
+		err  error
+		want bool
+	}{
+		{sandboxStock, true},
+		{fmt.Errorf("wrapped: %w", sandboxStock), true},
+		{&APIError{HTTPStatus: 409, Code: "SOMETHING"}, true},
+		{&APIError{HTTPStatus: 409, Code: CodeVariantUnavailable}, true},
+		{&APIError{HTTPStatus: 409, Code: CodeQuoteExpired}, false},
+		{&APIError{HTTPStatus: 400, Code: CodeRequestRejected, Detail: map[string]any{"errors": []any{map[string]any{"field": "email"}}}}, false},
+		{&APIError{HTTPStatus: 400, Code: CodeRequestRejected}, false},
+		{&APIError{HTTPStatus: 400, Code: CodeQuoteUnfulfillable, Detail: map[string]any{"reason": ReasonItemsUnshippable}}, false},
+		{&APIError{HTTPStatus: 503, Code: CodeServiceUnavailable}, false},
+		{errors.New("plain"), false},
+	}
+	for i, tc := range cases {
+		if got := IsItemRejection(tc.err); got != tc.want {
+			t.Errorf("case %d (%v): got %v want %v", i, tc.err, got, tc.want)
 		}
 	}
 }

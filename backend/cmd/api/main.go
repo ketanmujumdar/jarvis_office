@@ -172,7 +172,7 @@ func build(cfg config.Config, st store.Store, log *slog.Logger) (*app, error) {
 	orch := orchestrator.New(orchestrator.Deps{
 		Store: st, Queue: runner, Bus: a.Bus, Audit: auditLog, Approvals: appr, Reap: a.Reap,
 		Parser: agents.NewLLMParser(llmClient), Adapter: agents.NewReapAdapter(a.Reap),
-		Clock: time.Now, SearchDeadline: cfg.SearchDeadline, ResultsPerVendor: cfg.SearchResultsPerVendor,
+		Clock: time.Now, SearchDeadline: cfg.SearchDeadline, QuoteProbeTimeout: cfg.QuoteProbeTimeout, ResultsPerVendor: cfg.SearchResultsPerVendor,
 		CheckoutPollInterval: cfg.CheckoutPollInterval, CheckoutPollTimeout: cfg.CheckoutPollTimeout,
 		ReapReturnURL: cfg.ReapReturnURL, Logger: log,
 		Matcher: orchestrator.LLMOfferMatcher(llmClient),

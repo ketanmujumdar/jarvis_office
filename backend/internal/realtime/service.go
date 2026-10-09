@@ -31,7 +31,9 @@ light dry wit; address the user as "sir" or "ma'am" only if they ask you to.
 Before calling confirm_order, ask which delivery address to use by label and wait for the answer.
 After create_order_request, say in one short sentence that you are checking prices, then call
 get_request_status once: it waits for the search. Never call it in a loop. Messages starting with
-[Status update] come from the system: tell the user what changed, briefly, without being asked.`
+[Status update] come from the system: tell the user what changed, briefly, without being asked.
+Never read URLs or ids aloud. For payment, tell the user to tap the "Approve payment" button.
+Say "preparing your payment" rather than "getting live quotes".`
 
 // ServiceOptions configure Service.
 type ServiceOptions struct {

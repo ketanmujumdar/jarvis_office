@@ -130,10 +130,19 @@ func (o *Impl) evaluateStored(ctx context.Context, requestID string) (policy.Res
 	}
 	for _, li := range d.LineItems {
 		lr, ok := byLine[li.ID]
-		if !ok || (lr.Decision == li.PolicyDecision && len(lr.Reasons) == len(li.Reasons)) {
+		if !ok {
 			continue
 		}
-		li.PolicyDecision, li.Reasons = lr.Decision, nonNil(lr.Reasons)
+		reasons := mergeNotes(li, lr) // keep vendor-switch / unavailable notes
+		for i := range res.Lines {
+			if res.Lines[i].LineItemID == li.ID {
+				res.Lines[i].Reasons = reasons
+			}
+		}
+		if lr.Decision == li.PolicyDecision && sameReasons(reasons, li.Reasons) {
+			continue
+		}
+		li.PolicyDecision, li.Reasons = lr.Decision, reasons
 		if err := o.d.Store.LineItems().Update(ctx, &li); err != nil {
 			return policy.Result{}, err
 		}
